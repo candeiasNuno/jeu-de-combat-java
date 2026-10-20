@@ -3,7 +3,7 @@ import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) {
-        Sauvegarde systeme = new Sauvegarde();
+        /*Sauvegarde systeme = new Sauvegarde();
         Roster monEquipe;
         if(Files.exists(Paths.get("sauvegarde_roster.csv"))){
             System.out.println("--- CHARGEMENTS DU ROSTER EXISTANT ---");
@@ -27,6 +27,9 @@ public class Main {
         Combattant combattantE = monEquipe.getRoster().get(4);
 
         Arene combat1 = new Arene(combattantC , combattantD);
-        combat1.lancerCombat();
+        combat1.lancerCombat();*/
+
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.hub();
     }
 }
