@@ -123,9 +123,9 @@ public class Arene {
             case 2:
                 System.out.println(" ╔═══════════════════════ ══════════════════════════╗");
                 System.out.println();
-                System.out.println("║ [ 0 ] Coup Basique  [ DGT: " + (attaquant.getAttaqueDeBase()) + " ]                  ║");
-                System.out.println("║ [ 1 ] Spécial 1     [ DGT: " + (attaquant.getAttaqueDeBase() * 2) + " | Coût: 1 SP]      ║");
-                System.out.println("║ [ 2 ] Spécial 2     [ DGT: " + (attaquant.getAttaqueDeBase() * 3) + " | Coût: 2 SP]      ║");
+                System.out.println(" ║ [ 0 ] Coup Basique  [ DGT: " + (attaquant.getAttaqueDeBase()) + " ]                  ║");
+                System.out.println(" ║ [ 1 ] Spécial 1     [ DGT: " + (attaquant.getAttaqueDeBase() * 2) + " | Coût: 1 SP]      ║");
+                System.out.println(" ║ [ 2 ] Spécial 2     [ DGT: " + (attaquant.getAttaqueDeBase() * 3) + " | Coût: 2 SP]      ║");
                 System.out.println();
                 System.out.println(" ╚═══════════════════════ ══════════════════════════╝");
                 while (!saisieValide){
@@ -147,8 +147,8 @@ public class Arene {
             case 1:
                 System.out.println(" ╔═══════════════════════ ══════════════════════════╗");
                 System.out.println();
-                System.out.println("║ [ 0 ] Coup Basique  [ DGT: " + (attaquant.getAttaqueDeBase()) + " ]            ║");
-                System.out.println("║ [ 1 ] Spécial 1     [ DGT: " + (attaquant.getAttaqueDeBase() * 2) + " | Coût: 1 SP] ║");
+                System.out.println(" ║ [ 0 ] Coup Basique  [ DGT: " + (attaquant.getAttaqueDeBase()) + " ]                  ║");
+                System.out.println(" ║ [ 1 ] Spécial 1     [ DGT: " + (attaquant.getAttaqueDeBase() * 2) + " | Coût: 1 SP]      ║");
                 System.out.println();
                 System.out.println(" ╚═══════════════════════ ══════════════════════════╝");
                 while (!saisieValide){
@@ -170,7 +170,7 @@ public class Arene {
             case 0:
                 System.out.println(" ╔═══════════════════════ ══════════════════════════╗");
                 System.out.println();
-                System.out.println("║ [ 0 ] Coup Basique  [ DGT: " + (attaquant.getAttaqueDeBase()) + " ]                  ║");
+                System.out.println(" ║ [ 0 ] Coup Basique  [ DGT: " + (attaquant.getAttaqueDeBase()) + " ]                  ║");
                 System.out.println();
                 System.out.println(" ╚═══════════════════════ ══════════════════════════╝");
                 while (!saisieValide){
