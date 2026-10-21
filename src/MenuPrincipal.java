@@ -6,6 +6,7 @@ public class MenuPrincipal {
 /* VARIABLES */
     private Roster roster;
     private Sauvegarde sauvegarde;
+    private boolean jeuEnCours;
 
 /* CONSTRUCTEUR */
     public MenuPrincipal(){
@@ -17,18 +18,24 @@ public class MenuPrincipal {
             System.out.println("Fermeture d'urgence du jeu.");
             System.exit(1);
         }
+        this.jeuEnCours = true;
     }
 
     public void lancer(){
-        boolean jeuEnCours = true;
         Scanner sc = new Scanner(System.in);
         int repMenuPrincipal;
 
-        while(jeuEnCours){
+        while(this.jeuEnCours){
             this.hub();
             System.out.print(" > Que voulez-vous faire ? : ");
-            repMenuPrincipal = sc.nextInt();
-
+            if(sc.hasNextInt()){
+                repMenuPrincipal = sc.nextInt();
+                this.choixMenuPrincipal(repMenuPrincipal);
+            }else{
+                System.out.println(" > Selectionne un choix disponible parmi les options ! ");
+                sc.next();
+                this.pause(2000);
+            }
         }
     }
     public void hub(){
@@ -50,7 +57,7 @@ public class MenuPrincipal {
         System.out.println(" ╚══════════════════════════════════════════════════╝ ");
     }
 
-    public void choixMenuPrincipal(int x, boolean enCours){
+    public void choixMenuPrincipal(int x){
         Scanner sc = new Scanner(System.in);
         int rep;
         switch (x){
@@ -63,9 +70,12 @@ public class MenuPrincipal {
                 this.pause(2000); // DEVELOPPE CETTE PARTIE
                 break;
             case 3:
-                enCours = false;
+                this.jeuEnCours = false;
                 System.out.println(" > MERCI D\'AVOIR JOUE A NOTRE JEU!");
             default:
+                System.out.println(" > Selectionne un choix disponible parmi les options !");
+                this.pause(2000);
+                break;
         }
     }
 

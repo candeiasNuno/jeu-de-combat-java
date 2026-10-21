@@ -30,6 +30,6 @@ public class Main {
         combat1.lancerCombat();*/
 
         MenuPrincipal menu = new MenuPrincipal();
-        menu.hub();
+        menu.lancer();
     }
 }
