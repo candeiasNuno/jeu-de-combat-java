@@ -20,7 +20,7 @@ public class MenuPrincipal {
         }
         this.jeuEnCours = true;
     }
-
+/* METHODES */
     public void lancer(){
         Scanner sc = new Scanner(System.in);
         int repMenuPrincipal;
@@ -41,22 +41,22 @@ public class MenuPrincipal {
     public void hub(){
         System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
         System.out.flush();
-        System.out.println(" ╔══════════════════════════════════════════════════╗ ");
-        System.out.println(" ║                                                  ║");
-        System.out.println(" ║      \uD83D\uDD25 T O U R N O I  M A R T I A L \uD83D\uDD25          ║");
-        System.out.println(" ║            -- Édition Terminal --                ║");
-        System.out.println(" ║                                                  ║");
-        System.out.println(" ╠══════════════════════════════════════════════════╣");
-        System.out.println(" ║                                                  ║");
-        System.out.println(" ║   Menu Principal :                               ║");
-        System.out.println(" ║                                                  ║");
-        System.out.println(" ║   [ 1 ] Lancer un Combat (Versus)                ║");
-        System.out.println(" ║   [ 2 ] Afficher les Combattants (Roster)        ║");
-        System.out.println(" ║   [ 3 ] Quitter le jeu                           ║");
-        System.out.println(" ║                                                  ║");
-        System.out.println(" ╚══════════════════════════════════════════════════╝ ");
+        System.out.println();
+        System.out.println("╔════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                    ║");
+        System.out.println("║                🔥 T O U R N O I  M A R T I A L 🔥                  ║");
+        System.out.println("║                      -- Édition Terminal --                        ║");
+        System.out.println("║                                                                    ║");
+        System.out.println("╠════════════════════════════════════════════════════════════════════╣");
+        System.out.println("║                                                                    ║");
+        System.out.println("║   Menu Principal :                                                 ║");
+        System.out.println("║                                                                    ║");
+        System.out.println("║   [ 1 ] Lancer un Combat (Versus)                                  ║");
+        System.out.println("║   [ 2 ] Afficher les Combattants (Roster)                          ║");
+        System.out.println("║   [ 3 ] Quitter le jeu                                             ║");
+        System.out.println("║                                                                    ║");
+        System.out.println("╚════════════════════════════════════════════════════════════════════╝");
     }
-
     public void choixMenuPrincipal(int x){
         Scanner sc = new Scanner(System.in);
         int rep;
@@ -66,7 +66,7 @@ public class MenuPrincipal {
                 this.pause(2000);
                 break;
             case 2:
-                roster.afficherRoster();
+                this.affichageRoster();
                 this.pause(2000); // DEVELOPPE CETTE PARTIE
                 break;
             case 3:
@@ -78,7 +78,28 @@ public class MenuPrincipal {
                 break;
         }
     }
-
+    public void affichageRoster(){
+        System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
+        System.out.flush();
+        System.out.println();
+        System.out.println("╔════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                   \uD83D\uDC65 ROSTER DES COMBATTANTS \uD83D\uDC65                     ║");
+        System.out.println("╠═════╦══════════════╦══════════════╦════════╦════════╦══════════════╣");
+        System.out.println("║ ID  ║ NOM          ║ CLASSE       ║ ❤\uFE0F  PV  ║ ⚔\uFE0F  ATK ║ ⚡  VITESSE  ║");
+        for(int i = 0; i < this.roster.getRoster().size(); i++){
+            System.out.println("╠═════╬══════════════╬══════════════╬════════╬════════╬══════════════╣");
+            Combattant c = this.roster.getRoster().get(i);
+            System.out.printf("║ [%d] ║ %-12s ║ %-12s ║ %-6d ║ %-6d ║ %-12d ║\n",
+                    i,
+                    c.getNom().toUpperCase(),
+                    c.getClass().getSimpleName(),
+                    c.getVie(),
+                    c.getAttaqueDeBase(),
+                    c.getVitesse()
+            );
+        }
+        System.out.println("╚═════╩══════════════╩══════════════╩════════╩════════╩══════════════╝");
+    }
     public void pause(int millisecondes) {
         try {
             Thread.sleep(millisecondes);
@@ -86,4 +107,5 @@ public class MenuPrincipal {
             e.printStackTrace();
         }
     }
+
 }
