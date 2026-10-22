@@ -59,19 +59,37 @@ public class MenuPrincipal {
     }
     public void choixMenuPrincipal(int x){
         Scanner sc = new Scanner(System.in);
-        int rep;
+        int rep = 0;
         switch (x){
             case 1:
                 System.out.println(" Bientôt disponible : Lancement du Combat !");
                 this.pause(2000);
                 break;
             case 2:
-                this.affichageRoster();
-                this.pause(2000); // DEVELOPPE CETTE PARTIE
+                boolean dansRoster = true;
+                while(dansRoster){
+                    this.affichageRoster();
+                    System.out.print(" > Appuyez sur [ -1 ] pour retourne au menu principal ! : ");
+                    if(sc.hasNextInt()){
+                        rep = sc.nextInt();
+                        if( rep == -1){
+                            dansRoster = false;
+                        } else{
+                            System.out.println(" > Choix invalide.");
+                            this.pause(1000);
+                        }
+                    } else{
+                        System.out.println(" > Saisie invalide ! Veuillez entrer un chiffre.");
+                        sc.next();
+                        this.pause(1000);
+                    }
+
+                }
                 break;
             case 3:
                 this.jeuEnCours = false;
                 System.out.println(" > MERCI D\'AVOIR JOUE A NOTRE JEU!");
+                break;
             default:
                 System.out.println(" > Selectionne un choix disponible parmi les options !");
                 this.pause(2000);
