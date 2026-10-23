@@ -1,6 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentMap;
 
 public class MenuPrincipal {
 /* VARIABLES */
@@ -62,7 +63,15 @@ public class MenuPrincipal {
         int rep = 0;
         switch (x){
             case 1:
-                System.out.println(" Bientôt disponible : Lancement du Combat !");
+                this.affichageRoster();
+                Combattant c1 = this.choixCombattant(1);
+                this.affichageRoster();
+                Combattant c2 = this.choixCombattant(2);
+                System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
+                System.out.flush();
+                System.out.println(" > J1 : " + c1.getNom().toUpperCase());
+                System.out.println("      VS ");
+                System.out.println(" > J2 : " + c2.getNom().toUpperCase());
                 this.pause(2000);
                 break;
             case 2:
@@ -117,6 +126,29 @@ public class MenuPrincipal {
             );
         }
         System.out.println("╚═════╩══════════════╩══════════════╩════════╩════════╩══════════════╝");
+    }
+    public Combattant choixCombattant(int numeroJ){
+        Scanner sc = new Scanner(System.in);
+        int repJ;
+        Combattant c1 = null;
+        this.affichageRoster();
+        boolean selectionJ = false;
+        while(!selectionJ){
+            System.out.printf(" > J%d sélectionne un combattant ( tapez son ID ) : ", numeroJ);
+            if(sc.hasNextInt()){
+                repJ = sc.nextInt();
+                if(repJ >= 0 && repJ < this.roster.getRoster().size()){
+                    c1 = this.roster.getRoster().get(repJ);
+                    selectionJ = true;
+                } else{
+                    System.out.println(" > Veillez sélectionne un combattant présent dans le roster !");
+                }
+            } else{
+                System.out.println(" > Veillez sélectionne un combattant présent dans le roster !");
+                sc.next();
+            }
+        }
+        return c1;
     }
     public void pause(int millisecondes) {
         try {
