@@ -42,10 +42,12 @@ public class Arene {
         if(c1.getEstVivant()){
             this.pause(2000);
             this.victoire(c1);
+            this.pause(2000);
         }
         else{
             this.pause(2000);
             this.victoire(c2);
+            this.pause(3000);
         }
     }
 

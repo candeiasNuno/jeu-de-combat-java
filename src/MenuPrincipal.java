@@ -63,9 +63,7 @@ public class MenuPrincipal {
         int rep = 0;
         switch (x){
             case 1:
-                this.affichageRoster();
                 Combattant c1 = this.choixCombattant(1);
-                this.affichageRoster();
                 Combattant c2 = this.choixCombattant(2);
                 System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
                 System.out.flush();
@@ -73,6 +71,8 @@ public class MenuPrincipal {
                 System.out.println("      VS ");
                 System.out.println(" > J2 : " + c2.getNom().toUpperCase());
                 this.pause(2000);
+                Arene combat1 = new Arene(c1, c2);
+                combat1.lancerCombat();
                 break;
             case 2:
                 boolean dansRoster = true;
