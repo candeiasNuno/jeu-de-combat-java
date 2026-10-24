@@ -50,7 +50,6 @@ public class Arene {
             this.pause(3000);
         }
     }
-
     public void choixAttaque(int coups, Combattant attaquant, Combattant receveur){
         switch (coups){
             case 0:
@@ -90,7 +89,6 @@ public class Arene {
                 break;
         }
     }
-
     public void jouerTour(Combattant attaquant, Combattant defenseur){
         System.out.println();
         Scanner sc = new Scanner(System.in);
@@ -194,7 +192,6 @@ public class Arene {
         }
 
     }
-
     public void affichageEtatCombats(int nbRound){
         System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
         System.out.flush();
@@ -210,7 +207,6 @@ public class Arene {
         System.out.println("╚════════════════════════╩═════════════════════════╝");
         System.out.println();
     }
-
     public void pause(int millisecondes) {
         try {
             Thread.sleep(millisecondes);
@@ -218,7 +214,6 @@ public class Arene {
             e.printStackTrace();
         }
     }
-
     public void victoire(Combattant winner){
         System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
         System.out.flush();

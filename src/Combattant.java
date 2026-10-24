@@ -6,6 +6,11 @@ abstract public class Combattant {
     protected int vitesse;
     protected int jaugeSpecial;
     protected boolean estVivant;
+    protected int vieMax;
+    protected int stunMax;
+    protected int jaugeStun;
+    protected boolean estEnGarde;
+    protected boolean estEtourdi;
 
 /* CONSTRUCTEUR */
     protected Combattant( String nom, int vie, int attaqueDeBase, int vitesse){
@@ -15,6 +20,11 @@ abstract public class Combattant {
         this.vitesse = vitesse;
         this.jaugeSpecial = 0;
         this.estVivant = true;
+        this.vieMax = vie;
+        this.stunMax = 100;
+        this.estEnGarde = false;
+        this.estEtourdi = false;
+        this.jaugeStun = 0;
     }
 
 /* METHODES */
@@ -32,9 +42,27 @@ abstract public class Combattant {
             this.vie = this.vie - degats;
         }
     }
+    public void activeGarde(){
+        this.estEnGarde = true;
+    }
+    public void desactiveGarde(){
+        this.estEnGarde = false;
+    }
+    public void recevoirStun(int degatsStun){
+        if(this.jaugeStun + degatsStun < stunMax){
+            this.jaugeStun += degatsStun;
+        } else{
+            this.estEtourdi = true;
+            this.jaugeStun = 0;
+        }
+    }
+    public void desactiveStun(){
+        this.estEtourdi = false;
+    }
     abstract public void lanceAttaqueSpecial1(Combattant cible);
     abstract public void lanceAttaqueSpecial2(Combattant cible);
     abstract public void lanceAttaqueUltime(Combattant cible);
+
 
 
 /* GETTER */
@@ -44,4 +72,11 @@ abstract public class Combattant {
     public int getVitesse() { return vitesse; }
     public int getJaugeSpecial() { return jaugeSpecial; }
     public boolean getEstVivant() { return estVivant; }
+    public boolean isEstVivant() { return estVivant; }
+    public int getVieMax() { return vieMax; }
+    public int getStunMax() { return stunMax;}
+    public int getJaugeStun() { return jaugeStun;}
+    public boolean isEstEnGarde() { return estEnGarde; }
+    public boolean isEstEtourdi() { return estEtourdi; }
+
 }
