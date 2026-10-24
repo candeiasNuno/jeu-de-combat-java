@@ -11,6 +11,16 @@ public class Arene {
     }
 
 /* METHODES */
+    /* METHODE MULTIPLES*/
+    public void pause(int millisecondes) {
+    try {
+        Thread.sleep(millisecondes);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+
+    /* METHODES V1 */
     public void lancerCombat(){
         int round = 0;
         while(c1.getEstVivant() && c2.getEstVivant()){
@@ -207,13 +217,6 @@ public class Arene {
         System.out.println("╚════════════════════════╩═════════════════════════╝");
         System.out.println();
     }
-    public void pause(int millisecondes) {
-        try {
-            Thread.sleep(millisecondes);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
     public void victoire(Combattant winner){
         System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
         System.out.flush();
@@ -226,6 +229,17 @@ public class Arene {
         System.out.println("             ╚════════════════════════════════════════╝");
 
     }
+
+    /* METHODES V2 */
+    public void affichageEtatCombatV2(int nbRound){
+        System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
+        System.out.flush();
+        System.out.println("╔════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                        ROUND " + nbRound + " - FIGHT !                         ║");
+        System.out.println("╠═════════════════════════════════╦══════════════════════════════════╣"); // 33g 34d
+        System.out.printf("║   J1 : %-10s               ║   J2 : %-10s                ║\n", c1.getNom().toUpperCase(), c2.getNom().toUpperCase());
+    }
+
 
 
 }
