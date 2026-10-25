@@ -19,6 +19,30 @@ public class Arene {
         e.printStackTrace();
     }
 }
+    public int lireSaisieCachee(String message) {
+        java.io.Console console = System.console();
+        int choix = -1;
+        // Mode Terminal (Saisie masquée)
+        if (console != null) {
+            char[] saisie = console.readPassword("%s", message);
+            try {
+                choix = Integer.parseInt(new String(saisie));
+            } catch (NumberFormatException e) {
+                // Reste à -1 si la conversion échoue
+            }
+        }
+        // Mode IDE / Secours (Saisie visible)
+        else {
+            System.out.print(message);
+            java.util.Scanner sc = new java.util.Scanner(System.in);
+            if (sc.hasNextInt()) {
+                choix = sc.nextInt();
+            } else {
+                sc.next(); // Vide le scanner
+            }
+        }
+        return choix;
+    }
 
     /* METHODES V1 */
     public void lancerCombat(){
@@ -247,10 +271,8 @@ public class Arene {
         J1 = "PV       : " + Affichage.genererBarre(c1.getVie(), c1.getVieMax()) + " " + c1.getVie() + "/" + c1.getVieMax();
         J2 = "PV       : " + Affichage.genererBarre(c2.getVie(), c2.getVieMax()) + " " + c2.getVie() + "/" + c2.getVieMax();
         Affichage.deuxColonnes(J1, J2);
-        J1 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c1.getJaugeSpecial()) + " (" + c1.getJaugeSpecial() + "/" + 3 + ")" + " "
-                + c1.getJaugeSpecial() + "/" + 3;
-        J2 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c2.getJaugeSpecial()) + " (" + c2.getJaugeSpecial() + "/" + 3 + ")" + " "
-                + c2.getJaugeSpecial() + "/" + 3;
+        J1 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c1.getJaugeSpecial()) + " (" + c1.getJaugeSpecial() + "/" + 3 + ")";
+        J2 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c2.getJaugeSpecial()) + " (" + c2.getJaugeSpecial() + "/" + 3 + ")";
         Affichage.deuxColonnes(J1, J2);
         J1 = "Stun     : " + Affichage.genererBarre(c1.getJaugeStun(), c1.getStunMax()) + " " + c1.getJaugeStun() + "/" + c1.getStunMax();
         J2 = "Stun     : " + Affichage.genererBarre(c2.getJaugeStun(), c2.getStunMax()) + " " + c2.getJaugeStun() + "/" + c2.getStunMax();
@@ -308,7 +330,7 @@ public class Arene {
         }
         return action;
     }
-    public Action selectionnerAction(Combattant c, int nbRound){
+    public Action selectionnerAction(Combattant c, int nbRound, String texteTourPrecedant){
         this.affichageEtatCombatV2(nbRound);
         this.affichageActionDispo(c);
         int maxDispo;
@@ -333,33 +355,124 @@ public class Arene {
                 maxDispo = -1;
                 break;
         }
-        Scanner sc = new Scanner(System.in);
+        System.out.println(texteTourPrecedant);
+        Affichage.ligneSimple();
         while(!choixFait){
-            System.out.print("> " + c.getNom().toUpperCase() + ", choisissez votre action (1-" + maxDispo + ") : ");
-            if(sc.hasNextInt()){
-                rep = sc.nextInt();
-                if(rep >=1 && rep <= maxDispo){
-                    action = creerAction(rep);
-                    choixFait = true;
-                } else{
-                    System.out.println("> Selectionne une action disponible !");
-                    sc.next();
-
-                }
+            String prompt = "> " + c.getNom().toUpperCase() + ", choisissez votre action (1-" + maxDispo + ") : ";
+            rep = this.lireSaisieCachee(prompt);
+            if(rep >= 1 && rep <= maxDispo){
+                action = creerAction(rep);
+                choixFait = true;
             } else{
                 System.out.println("> Selectionne une action disponible !");
-                sc.next();
             }
         }
         return action;
 
     }
-    public void resoudreCroisement(Action act1, Combattant j1, Action act2, Combattant j2){
-        String actionJ1 = act1.nomAction.toUpperCase();
+    public String resoudreCroisement(Action act1, Combattant j1, Action act2, Combattant j2){
+        String actionJ1 = act1.getNomAction().toUpperCase();
         int niveauActJ1 = act1.getNiveauAction();
-        String actionJ2 = act2.nomAction.toUpperCase();
+        String actionJ2 = act2.getNomAction().toUpperCase();
         int niveauActJ2 = act2.getNiveauAction();
-        
+        String message = "> Duel precedent : " + j1.getNom().toUpperCase() + " [" + actionJ1 + "] ◄── VS ──► " +
+                j2.getNom().toUpperCase() + " [" + actionJ2 + "]\n";
+
+        if(actionJ1.equals("ATTAQUE")){
+            if(actionJ2.equals("CHOPE")){
+                this.lanceAttaque(j1, j2, niveauActJ1);
+                message += "> Verdict        : [COUNTER HIT - INTERROMPU !] " + j1.getNom().toUpperCase() + " frappe " +
+                        j2.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd des PV !";
+            } else if(actionJ2.equals("GARDE")){
+                message += "> Verdict        : [GARDE PARFAITE !] " + j2.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " gagne 1 de jauge Special !";
+                j2.recevoirJaugeSpecial(1);
+            } else if(actionJ2.equals("ATTAQUE")){
+                if(niveauActJ1 > niveauActJ2){
+                    message += "> Verdict        : [CRUNCH - ECRASEMENT !] " + j1.getNom().toUpperCase() + " ecrase l\'attaque de " +
+                            j2.getNom().toUpperCase() + " ! \n";
+                    message += "> Impact         : " + j2.getNom().toUpperCase() + " perd des PV !";
+                    this.lanceAttaque(j1, j2, niveauActJ1);
+                } else if(niveauActJ1 < niveauActJ2){
+                    message += "> Verdict        : [CRUNCH - ECRASEMENT !] " + j2.getNom().toUpperCase() + " ecrase l\'attaque de " +
+                            j1.getNom().toUpperCase() + " ! \n";
+                    message += "> Impact         : " + j1.getNom().toUpperCase() + " perd des PV !";
+                    this.lanceAttaque(j2, j1, niveauActJ2);
+                } else{
+                    message += "> Verdict        : [EGALITE !] " + j1.getNom().toUpperCase() + " et " +
+                            j2.getNom().toUpperCase() + " se sont neutralise ! \n";
+                    message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+                }
+            }
+        } else if(actionJ1.equals("GARDE")){
+            if(actionJ2.equals("ATTAQUE")){
+                message += "> Verdict        : [GARDE PARFAITE !] " + j1.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " gagne 1 de jauge Special !";
+                j1.recevoirJaugeSpecial(1);
+            } else if(actionJ2.equals("CHOPE")){
+                message += "> Verdict        : [BRISE-GARDE !] " + j2.getNom().toUpperCase() + " attrape " + j1.getNom().toUpperCase() +
+                        " a travers sa Garde et l'envoi au sol !\n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd des Pv !";
+                j2.lanceChope(j1);
+            } else if(actionJ2.equals("GARDE")){
+                message += "> Verdict        : [OBSERVATION !] " + j1.getNom().toUpperCase() + " et " +
+                        j2.getNom().toUpperCase() + " reste les 2 en garde et s\'observe ! \n";
+                message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+            }
+        } else if(actionJ1.equals("CHOPE")){
+            if(actionJ2.equals("GARDE")){
+                message += "> Verdict        : [BRISE-GARDE !] " + j1.getNom().toUpperCase() + " attrape " + j2.getNom().toUpperCase() +
+                        " a travers sa Garde et l'envoi au sol !\n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd des Pv !";
+                j1.lanceChope(j2);
+            } else if(actionJ2.equals("ATTAQUE")){
+                message += "> Verdict        : [COUNTER HIT - INTERROMPU !] " + j2.getNom().toUpperCase() + " frappe " +
+                        j1.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd des PV !";
+                this.lanceAttaque(j2, j1, niveauActJ2);
+            } else if(actionJ2.equals("CHOPE")){
+                message += "> Verdict        : [TECH - ANNULATION !] " + j1.getNom().toUpperCase() + " et " +
+                        j2.getNom().toUpperCase() + " tente une chope en meme temps et se neutralise ! \n";
+                message += "> Impact         : Les 2 chope s\'annule !";
+            }
+        }
+        return message;
+    }
+    public void lanceAttaque(Combattant att, Combattant cible, int niveauAttaque){
+        switch (niveauAttaque){
+            case 1:
+                att.lanceAttaqueDebase(cible);
+                break;
+            case 2:
+                att.lanceAttaqueSpecial1(cible);
+                break;
+            case 3:
+                att.lanceAttaqueSpecial2(cible);
+                break;
+            case 4:
+                att.lanceAttaqueUltime(cible);
+                break;
+            default:
+                System.out.println("Erreur lance attaque");
+                break;
+        }
+    }
+    public void lancerCombatV2(){
+        int round = 1;
+        String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
+        while(c1.estVivant && c2.estVivant){
+            Action actJ1 = selectionnerAction(c1, round, actionRoundPrecedent);
+            this.pause(1000);
+            Action actJ2 = selectionnerAction(c2, round, actionRoundPrecedent);
+            actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
+            round++;
+        }
+        if(c1.estVivant){
+            this.victoire(c1);
+        } else{
+            this.victoire(c2);
+        }
     }
 
 

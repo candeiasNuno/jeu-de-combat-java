@@ -34,12 +34,20 @@ abstract public class Combattant {
         }
         cible.recevoirDegats(this.attaqueDeBase);
     }
+    public void lanceChope(Combattant cible){
+        cible.recevoirDegats(this.attaqueDeBase * 2);
+    }
     public void recevoirDegats(int degats){
         if(this.vie - degats <= 0){
             this.vie = 0;
             this.estVivant = false;
         }else{
             this.vie = this.vie - degats;
+        }
+    }
+    public void recevoirJaugeSpecial(int nb){
+        if(this.jaugeSpecial < 3){
+            this.jaugeSpecial++;
         }
     }
     public void activeGarde(){

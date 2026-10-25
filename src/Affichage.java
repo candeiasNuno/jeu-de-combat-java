@@ -6,6 +6,9 @@ public class Affichage {
     public static void haut(){
         System.out.println("╔" + "═".repeat(LARGEUR - 2) + "╗");
     }
+    public static void ligneSimple(){
+        System.out.println("─".repeat(LARGEUR));
+    }
     public static void bas(){
         System.out.println("╚" + "═".repeat(LARGEUR - 2) + "╝");
     }
