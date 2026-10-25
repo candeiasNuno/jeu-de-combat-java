@@ -232,12 +232,7 @@ public class Arene {
 
     /* METHODES V2 */
     public void affichageEtatCombatV2(int nbRound){
-        System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
-        System.out.flush();
-        System.out.println("╔════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║                        ROUND " + nbRound + " - FIGHT !                         ║");
-        System.out.println("╠═════════════════════════════════╦══════════════════════════════════╣"); // 33g 34d
-        System.out.printf("║   J1 : %-10s               ║   J2 : %-10s                ║\n", c1.getNom().toUpperCase(), c2.getNom().toUpperCase());
+
     }
 
 
