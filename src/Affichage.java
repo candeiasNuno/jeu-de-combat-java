@@ -1,7 +1,7 @@
 public class Affichage {
     protected static final int LARGEUR = 70;
     private static final int LARGEUR_TEXTE = LARGEUR - 4;
-    
+
 /* AFFICHAGE CLASSIQUE */
     public static void haut(){
         System.out.println("╔" + "═".repeat(LARGEUR - 2) + "╗");
@@ -15,13 +15,29 @@ public class Affichage {
     public static void separateurDeuxColonnes() {
         System.out.println("╠" + "═".repeat(33) + "╦" + "═".repeat(34) + "╣");
     }
+    public static void separateurDeuxColonnesVersHaut() {
+        System.out.println("╠" + "═".repeat(33) + "╩" + "═".repeat(34) + "╣");
+    }
     public static void ligneVide(){
         System.out.println("╠" + " ".repeat(LARGEUR - 2) + "╣");
+    }
+    public static void clear(){
+        System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
+        System.out.flush();
     }
 
 /* AFFICHAGE AVEC TEXTE */
     public static void ligne(String texte) {
         System.out.printf("║ %-" + LARGEUR_TEXTE + "s ║%n", tronquer(texte, LARGEUR_TEXTE));
+    }
+    public static void ligneSpecial(String texte1, String texte2, String texte3) {
+        // 66 caractères disponibles : 3 colonnes de 20 caractères + 2 écarts de 3 espaces (20 + 3 + 20 + 3 + 20 = 66)
+        int largeurCol = (LARGEUR_TEXTE - 6) / 3; // Donne exactement 20
+
+        System.out.printf("║ %-" + largeurCol + "s   %-" + largeurCol + "s   %-" + largeurCol + "s ║%n",
+                tronquer(texte1, largeurCol),
+                tronquer(texte2, largeurCol),
+                tronquer(texte3, largeurCol));
     }
     public static void ligneCentree(String texte) {
         String texteSecurise = tronquer(texte, LARGEUR_TEXTE);
@@ -47,7 +63,7 @@ public class Affichage {
     }
     public static String genererJaugeSpeciale(int jaugeActuelle) {
         int jaugeSecurisee = Math.max(0, Math.min(3, jaugeActuelle));
-        return "[" + "■".repeat(jaugeSecurisee) + "□".repeat(3 - jaugeSecurisee) + "]";
+        return "[" + "■".repeat(jaugeSecurisee) + "□".repeat(3 - jaugeSecurisee) + " ]";
     }
 
 /* SECURITE ANTI-DÉBORDEMENTS */

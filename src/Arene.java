@@ -232,8 +232,136 @@ public class Arene {
 
     /* METHODES V2 */
     public void affichageEtatCombatV2(int nbRound){
+        Affichage.clear();
+        Affichage.haut();
+        String etatC1;
+        String etatC2;
+        Affichage.ligneCentree("ROUND " + nbRound + " - ARENE PVP");
+        Affichage.separateurDeuxColonnes();
+        String J1 = "JOUEUR 1 : " + c1.getNom().toUpperCase() + " (" + c1.getClass().getSimpleName().toUpperCase() + ")";
+        String J2 = "JOUEUR 2 : " + c2.getNom().toUpperCase() + " (" + c2.getClass().getSimpleName().toUpperCase() + ")";
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "État     : " + c1.etatsCombattant();
+        J2 = "État     : " + c2.etatsCombattant();
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "PV       : " + Affichage.genererBarre(c1.getVie(), c1.getVieMax()) + " " + c1.getVie() + "/" + c1.getVieMax();
+        J2 = "PV       : " + Affichage.genererBarre(c2.getVie(), c2.getVieMax()) + " " + c2.getVie() + "/" + c2.getVieMax();
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c1.getJaugeSpecial()) + " (" + c1.getJaugeSpecial() + "/" + 3 + ")" + " "
+                + c1.getJaugeSpecial() + "/" + 3;
+        J2 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c2.getJaugeSpecial()) + " (" + c2.getJaugeSpecial() + "/" + 3 + ")" + " "
+                + c2.getJaugeSpecial() + "/" + 3;
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "Stun     : " + Affichage.genererBarre(c1.getJaugeStun(), c1.getStunMax()) + " " + c1.getJaugeStun() + "/" + c1.getStunMax();
+        J2 = "Stun     : " + Affichage.genererBarre(c2.getJaugeStun(), c2.getStunMax()) + " " + c2.getJaugeStun() + "/" + c2.getStunMax();
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "VIT : " + c1.getVitesse() + "         ATK : " +   c1.getAttaqueDeBase();
+        J2 = "VIT : " + c2.getVitesse() + "         ATK : " +   c2.getAttaqueDeBase();
+        Affichage.deuxColonnes(J1, J2);
+        Affichage.separateurDeuxColonnesVersHaut();
+    }
+    public void affichageActionDispo(Combattant c){
+        Affichage.ligne("ACTIONS DISPONIBLES (" + c.getNom().toUpperCase() + ") :");
+        Affichage.ligneSpecial("[1] Attaque Base (0)", "[2] Garde (0)", "[3] Chope (0)");
+        switch (c.getJaugeSpecial()){
+            case 0:
+                Affichage.ligneSpecial("[-] Spéciale1 (Bloq)", "[-] Spéciale2 (Bloq)", "[-] Ultime (Bloq)");
+                break;
+            case 1:
+                Affichage.ligneSpecial("[4] Spéciale1 (1)", "[-] Spéciale2 (Bloq)", "[-] Ultime (Bloq)");
+                break;
+            case 2:
+                Affichage.ligneSpecial("[4] Spéciale1 (1)", "[5] Spéciale2 (2)", "[-] Ultime (Bloq)");
+                break;
+            case 3:
+                Affichage.ligneSpecial("[4] Spéciale1 (1)", "[5] Spéciale2 (2)", "[6] Ultime (3)");
+                break;
+            default:
+                System.out.println("ERREUR JAUGE SPECIAL");
+        }
+        Affichage.bas();
+    }
+    public Action creerAction(int choix){
+        Action action = null;
+        switch (choix){
+            case 1:
+                action = new Action("Attaque", 1);
+                break;
+            case 2:
+                action = new Action("Garde", 1);
+                break;
+            case 3:
+                action = new Action("Chope", 1);
+                break;
+            case 4:
+                action = new Action("Attaque", 2);
+                break;
+            case 5:
+                action = new Action("Attaque", 3);
+                break;
+            case 6:
+                action = new Action("Attaque", 4);
+                break;
+            default:
+                System.out.println("Erreur creation d action");
+                break;
+        }
+        return action;
+    }
+    public Action selectionnerAction(Combattant c, int nbRound){
+        this.affichageEtatCombatV2(nbRound);
+        this.affichageActionDispo(c);
+        int maxDispo;
+        int rep;
+        boolean choixFait = false;
+        Action action = null;
+
+        switch (c.getJaugeSpecial()){
+            case 0:
+                maxDispo = 3;
+                break;
+            case 1:
+                maxDispo = 4;
+                break;
+            case 2:
+                maxDispo = 5;
+                break;
+            case 3:
+                maxDispo = 6;
+                break;
+            default:
+                maxDispo = -1;
+                break;
+        }
+        Scanner sc = new Scanner(System.in);
+        while(!choixFait){
+            System.out.print("> " + c.getNom().toUpperCase() + ", choisissez votre action (1-" + maxDispo + ") : ");
+            if(sc.hasNextInt()){
+                rep = sc.nextInt();
+                if(rep >=1 && rep <= maxDispo){
+                    action = creerAction(rep);
+                    choixFait = true;
+                } else{
+                    System.out.println("> Selectionne une action disponible !");
+                    sc.next();
+
+                }
+            } else{
+                System.out.println("> Selectionne une action disponible !");
+                sc.next();
+            }
+        }
+        return action;
 
     }
+    public void resoudreCroisement(Action act1, Combattant j1, Action act2, Combattant j2){
+        String actionJ1 = act1.nomAction.toUpperCase();
+        int niveauActJ1 = act1.getNiveauAction();
+        String actionJ2 = act2.nomAction.toUpperCase();
+        int niveauActJ2 = act2.getNiveauAction();
+        
+    }
+
 
 
 

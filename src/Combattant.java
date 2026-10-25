@@ -56,6 +56,13 @@ abstract public class Combattant {
             this.jaugeStun = 0;
         }
     }
+    public String etatsCombattant(){
+        if(this.estEtourdi){
+            return "ETOURDI";
+        } else{
+            return "NORMAL";
+        }
+    }
     public void desactiveStun(){
         this.estEtourdi = false;
     }

@@ -12,5 +12,6 @@ public class Main {
         Combattant c2 = new Shoto("Baptiste");
         Arene combat1 = new Arene(c1, c2);
         combat1.affichageEtatCombatV2(1);
+        combat1.affichageActionDispo(c1);
     }
 }
