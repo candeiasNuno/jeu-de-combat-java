@@ -11,7 +11,7 @@ public class Arene {
     }
 
 /* METHODES */
-    /* METHODE MULTIPLES*/
+    /* METHODE MULTIPLES */
     public void pause(int millisecondes) {
     try {
         Thread.sleep(millisecondes);
@@ -411,9 +411,21 @@ public class Arene {
                             j1.getNom().toUpperCase() + " ! \n";
                     message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
                 } else{
-                    message += "> Verdict        : [EGALITE !] " + j1.getNom().toUpperCase() + " et " +
-                            j2.getNom().toUpperCase() + " se sont neutralise ! \n";
-                    message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+                    if(j1.getVitesse() > j2.getVitesse()){
+                        degats = this.lanceAttaque(j1, j2, niveauActJ1);
+                        message += "> Verdict        : [COUNTER HIT !] " + j1.getNom().toUpperCase() + " est plus rapide que " +
+                                j2.getNom().toUpperCase() + " ! \n";
+                        message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+                    } else if(j2.getVitesse() > j1.getVitesse()){
+                        degats = this.lanceAttaque(j2, j1, niveauActJ2);
+                        message += "> Verdict        : [COUNTER HIT !] " + j2.getNom().toUpperCase() + " est plus rapide que " +
+                                j1.getNom().toUpperCase() + " ! \n";
+                        message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+                    } else{
+                        message += "> Verdict        : [EGALITE !] " + j1.getNom().toUpperCase() + " et " +
+                                j2.getNom().toUpperCase() + " ont la meme vitesse d\'attaque ! Ils se sont neutralise ! \n";
+                        message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+                    }
                 }
             } else if(actionJ2.equals("STUN")){
                 degats = this.lanceAttaque(j1, j2, niveauActJ1);

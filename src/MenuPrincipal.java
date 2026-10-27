@@ -21,7 +21,16 @@ public class MenuPrincipal {
         }
         this.jeuEnCours = true;
     }
-/* METHODES */
+/* METHODES MULTIPLES */
+    public void pause(int millisecondes) {
+    try {
+        Thread.sleep(millisecondes);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+
+/* METHODES V1 */
     public void lancer(){
         Scanner sc = new Scanner(System.in);
         int repMenuPrincipal;
@@ -150,12 +159,81 @@ public class MenuPrincipal {
         }
         return c1;
     }
-    public void pause(int millisecondes) {
-        try {
-            Thread.sleep(millisecondes);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+ /* METHODES V2*/
+    public void affichageHubV2(){
+        String texte;
+        Affichage.clear();
+        Affichage.haut();
+        Affichage.saut();
+        texte = "T O U R N O I  M A R T I A L";
+        Affichage.ligneCentree(texte);
+        texte = "-- Édition Terminal --";
+        Affichage.ligneCentree(texte);
+        Affichage.saut();
+        Affichage.separateur();
+        Affichage.saut();
+        texte = "Menu Principal :";
+        Affichage.ligne(texte);
+        Affichage.saut();
+        texte = "[ 1 ] Lancer un Combat (Versus)";
+        Affichage.ligne(texte);
+        texte = "[ 2 ] Afficher les Combattants (Roster)";
+        Affichage.ligne(texte);
+        texte = "[ 3 ] Afficher les Regles du Combat";
+        Affichage.ligne(texte);
+        texte = "[ 4 ] Quitter le jeu";
+        Affichage.ligne(texte);
+        Affichage.saut();
+        Affichage.bas();
+    }
+    public void choixMenuPrincipalV2(int x){
+        Scanner sc = new Scanner(System.in);
+        int rep = 0;
+        switch (x){
+            case 1:
+                Combattant c1 = this.choixCombattant(1);
+                Combattant c2 = this.choixCombattant(2);
+                Affichage.clear();
+                this.pause(2000);
+                Arene combat1 = new Arene(c1, c2);
+                combat1.lancerCombat();
+                break;
+            case 2:
+                boolean dansRoster = true;
+                while(dansRoster){
+                    this.affichageRoster();
+                    System.out.print(" > Appuyez sur [ -1 ] pour retourne au menu principal ! : ");
+                    if(sc.hasNextInt()){
+                        rep = sc.nextInt();
+                        if( rep == -1){
+                            dansRoster = false;
+                        } else{
+                            System.out.println(" > Choix invalide.");
+                            this.pause(1000);
+                        }
+                    } else{
+                        System.out.println(" > Saisie invalide ! Veuillez entrer un chiffre.");
+                        sc.next();
+                        this.pause(1000);
+                    }
+
+                }
+                break;
+            case 4:
+                this.jeuEnCours = false;
+                System.out.println(" > MERCI D\'AVOIR JOUE A NOTRE JEU!");
+                break;
+            default:
+                System.out.println(" > Selectionne un choix disponible parmi les options !");
+                this.pause(2000);
+                break;
         }
     }
+    public void affichageRosterV2(){
+        Affichage.clear();
+        Affichage.haut();
+    }
+
 
 }

@@ -24,6 +24,9 @@ public class Affichage {
     public static void ligneVide(){
         System.out.println("╠" + " ".repeat(LARGEUR - 2) + "╣");
     }
+    public static void saut(){
+        System.out.println("║" + " ".repeat(LARGEUR - 2) + "║");
+    }
     public static void clear(){
         System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
         System.out.flush();
@@ -67,6 +70,33 @@ public class Affichage {
     public static String genererJaugeSpeciale(int jaugeActuelle) {
         int jaugeSecurisee = Math.max(0, Math.min(3, jaugeActuelle));
         return "[" + "■".repeat(jaugeSecurisee) + "□".repeat(3 - jaugeSecurisee) + " ]";
+    }
+
+/* AFFICHAGE ROSTER */
+    public static void separateurSeptColonnesHaut() {
+        System.out.println("╠" + "═".repeat(5) + "╦" + "═".repeat(13) + "╦" + "═".repeat(11)
+                + "╦" + "═".repeat(8) + "╦" + "═".repeat(8) + "╦" + "═".repeat(9)
+                + "╦" + "═".repeat(8) + "╣");
+    }
+    public static void separateurSeptColonnesMilieu() {
+        System.out.println("╠" + "═".repeat(5) + "╬" + "═".repeat(13) + "╬" + "═".repeat(11)
+                + "╬" + "═".repeat(8) + "╬" + "═".repeat(8) + "╬" + "═".repeat(9)
+                + "╬" + "═".repeat(8) + "╣");
+    }
+    public static void basSeptColonnes() {
+        System.out.println("╚" + "═".repeat(5) + "╩" + "═".repeat(13) + "╩" + "═".repeat(11)
+                + "╩" + "═".repeat(8) + "╩" + "═".repeat(8) + "╩" + "═".repeat(9)
+                + "╩" + "═".repeat(8) + "╝");
+    }
+    public static void septColonnes(String c1, String c2, String c3, String c4, String c5, String c6, String c7) {
+        System.out.printf("║ %-3s ║ %-11s ║ %-9s ║ %-6s ║ %-6s ║ %-7s ║ %-6s ║%n",
+                tronquer(c1, 3),
+                tronquer(c2, 11),
+                tronquer(c3, 9),
+                tronquer(c4, 6),
+                tronquer(c5, 6),
+                tronquer(c6, 7),
+                tronquer(c7, 6));
     }
 
 /* SECURITE ANTI-DÉBORDEMENTS */

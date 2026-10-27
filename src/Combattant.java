@@ -46,9 +46,7 @@ abstract public class Combattant {
         }
     }
     public void recevoirJaugeSpecial(int nb){
-        if(this.jaugeSpecial < 3){
-            this.jaugeSpecial++;
-        }
+        this.jaugeSpecial = Math.min(3, this.jaugeSpecial + nb);
     }
     public void recevoirStun(int degatsStun){
         if(this.jaugeStun + degatsStun < stunMax){
@@ -69,7 +67,14 @@ abstract public class Combattant {
         this.estEtourdi = false;
     }
     public void consomation(int niveau){
-        this.jaugeSpecial -= (niveau - 1);
+        this.jaugeSpecial = Math.max(0, this.jaugeSpecial - (niveau - 1));
+    }
+    public void soigne(int nb){
+        if(this.vie + nb > this.vieMax){
+            this.vie = this.vieMax;
+        } else{
+            this.vie += nb;
+        }
     }
     abstract public int lanceAttaqueSpecial1(Combattant cible);
     abstract public int lanceAttaqueSpecial2(Combattant cible);
