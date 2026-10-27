@@ -9,7 +9,6 @@ abstract public class Combattant {
     protected int vieMax;
     protected int stunMax;
     protected int jaugeStun;
-    protected boolean estEnGarde;
     protected boolean estEtourdi;
 
 /* CONSTRUCTEUR */
@@ -22,17 +21,17 @@ abstract public class Combattant {
         this.estVivant = true;
         this.vieMax = vie;
         this.stunMax = 100;
-        this.estEnGarde = false;
         this.estEtourdi = false;
         this.jaugeStun = 0;
     }
 
 /* METHODES */
-    public void lanceAttaqueDebase(Combattant cible){
+    public int lanceAttaqueDebase(Combattant cible){
         if(this.jaugeSpecial < 3){
             this.jaugeSpecial++;
         }
         cible.recevoirDegats(this.attaqueDeBase);
+        return this.attaqueDeBase;
     }
     public void lanceChope(Combattant cible){
         cible.recevoirDegats(this.attaqueDeBase * 2);
@@ -49,12 +48,6 @@ abstract public class Combattant {
         if(this.jaugeSpecial < 3){
             this.jaugeSpecial++;
         }
-    }
-    public void activeGarde(){
-        this.estEnGarde = true;
-    }
-    public void desactiveGarde(){
-        this.estEnGarde = false;
     }
     public void recevoirStun(int degatsStun){
         if(this.jaugeStun + degatsStun < stunMax){
@@ -74,10 +67,13 @@ abstract public class Combattant {
     public void desactiveStun(){
         this.estEtourdi = false;
     }
-    abstract public void lanceAttaqueSpecial1(Combattant cible);
-    abstract public void lanceAttaqueSpecial2(Combattant cible);
-    abstract public void lanceAttaqueUltime(Combattant cible);
-
+    public void consomation(int niveau){
+        this.jaugeSpecial -= (niveau - 1);
+    }
+    abstract public int lanceAttaqueSpecial1(Combattant cible);
+    abstract public int lanceAttaqueSpecial2(Combattant cible);
+    abstract public int lanceAttaqueUltime(Combattant cible);
+    abstract public int estimationDegatInflige(int niveauAtt);
 
 
 /* GETTER */
@@ -91,7 +87,6 @@ abstract public class Combattant {
     public int getVieMax() { return vieMax; }
     public int getStunMax() { return stunMax;}
     public int getJaugeStun() { return jaugeStun;}
-    public boolean isEstEnGarde() { return estEnGarde; }
     public boolean isEstEtourdi() { return estEtourdi; }
 
 }

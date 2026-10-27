@@ -358,6 +358,12 @@ public class Arene {
         System.out.println(texteTourPrecedant);
         Affichage.ligneSimple();
         while(!choixFait){
+            if(c.estEtourdi){
+                System.out.println("> " + c.getNom().toUpperCase() + ", est etourdi ! ");
+                this.pause(2000);
+                action = new Action("STUN", 0);
+                break;
+            }
             String prompt = "> " + c.getNom().toUpperCase() + ", choisissez votre action (1-" + maxDispo + ") : ";
             rep = this.lireSaisieCachee(prompt);
             if(rep >= 1 && rep <= maxDispo){
@@ -375,6 +381,7 @@ public class Arene {
         int niveauActJ1 = act1.getNiveauAction();
         String actionJ2 = act2.getNomAction().toUpperCase();
         int niveauActJ2 = act2.getNiveauAction();
+        int degatStun;
         String message = "> Duel precedent : " + j1.getNom().toUpperCase() + " [" + actionJ1 + "] ◄── VS ──► " +
                 j2.getNom().toUpperCase() + " [" + actionJ2 + "]\n";
 
@@ -385,8 +392,11 @@ public class Arene {
                         j2.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
                 message += "> Impact         : " + j2.getNom().toUpperCase() + " perd des PV !";
             } else if(actionJ2.equals("GARDE")){
+                degatStun = j1.estimationDegatInflige(niveauActJ1);
+                j1.consomation(niveauActJ1);
+                j2.recevoirStun(degatStun);
                 message += "> Verdict        : [GARDE PARFAITE !] " + j2.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
-                message += "> Impact         : " + j2.getNom().toUpperCase() + " gagne 1 de jauge Special !";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " gagne 1 de jauge Special et subit " + degatStun + " de degats de stun.";
                 j2.recevoirJaugeSpecial(1);
             } else if(actionJ2.equals("ATTAQUE")){
                 if(niveauActJ1 > niveauActJ2){
@@ -404,11 +414,19 @@ public class Arene {
                             j2.getNom().toUpperCase() + " se sont neutralise ! \n";
                     message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
                 }
+            } else if(actionJ2.equals("STUN")){
+                this.lanceAttaque(j1, j2, niveauActJ1);
+                message += "> Verdict        : [FREE HIT !] " + j1.getNom().toUpperCase() + " frappe " +
+                        j2.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd des PV !";
             }
         } else if(actionJ1.equals("GARDE")){
             if(actionJ2.equals("ATTAQUE")){
+                degatStun = j2.estimationDegatInflige(niveauActJ2);
+                j2.consomation(niveauActJ2);
+                j1.recevoirStun(degatStun);
                 message += "> Verdict        : [GARDE PARFAITE !] " + j1.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
-                message += "> Impact         : " + j1.getNom().toUpperCase() + " gagne 1 de jauge Special !";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " gagne 1 de jauge Special et subit " + degatStun + " de degats de stun.";
                 j1.recevoirJaugeSpecial(1);
             } else if(actionJ2.equals("CHOPE")){
                 message += "> Verdict        : [BRISE-GARDE !] " + j2.getNom().toUpperCase() + " attrape " + j1.getNom().toUpperCase() +
@@ -418,6 +436,10 @@ public class Arene {
             } else if(actionJ2.equals("GARDE")){
                 message += "> Verdict        : [OBSERVATION !] " + j1.getNom().toUpperCase() + " et " +
                         j2.getNom().toUpperCase() + " reste les 2 en garde et s\'observe ! \n";
+                message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+            } else if(actionJ2.equals("STUN")){
+                message += "> Verdict        : [OCCASION MANQUE !] " + j1.getNom().toUpperCase() + " observe " +
+                        j2.getNom().toUpperCase() + " alors qu\'il est stun ! \n";
                 message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
             }
         } else if(actionJ1.equals("CHOPE")){
@@ -435,36 +457,76 @@ public class Arene {
                 message += "> Verdict        : [TECH - ANNULATION !] " + j1.getNom().toUpperCase() + " et " +
                         j2.getNom().toUpperCase() + " tente une chope en meme temps et se neutralise ! \n";
                 message += "> Impact         : Les 2 chope s\'annule !";
+            } else if(actionJ2.equals("STUN")){
+                j1.lanceChope(j2);
+                message += "> Verdict        : [FREE CHOPE !] " + j1.getNom().toUpperCase() + " chope " +
+                        j2.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd des PV !";
+            }
+        } else if(actionJ1.equals("STUN")){
+            if(actionJ2.equals("ATTAQUE")){
+                this.lanceAttaque(j2, j1, niveauActJ2);
+                message += "> Verdict        : [FREE HIT !] " + j2.getNom().toUpperCase() + " frappe " +
+                        j1.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd des PV !";
+            } else if(actionJ2.equals("GARDE")){
+                message += "> Verdict        : [OCCASION MANQUE !] " + j2.getNom().toUpperCase() + " observe " +
+                        j1.getNom().toUpperCase() + " alors qu\'il est stun ! \n";
+                message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+            } else if(actionJ2.equals("CHOPE")){
+                j2.lanceChope(j1);
+                message += "> Verdict        : [FREE CHOPE !] " + j2.getNom().toUpperCase() + " chope " +
+                        j1.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd des PV !";
+            } else if(actionJ2.equals("STUN")){
+                message += "> Verdict        : [DOUBLE STUN !] " + j2.getNom().toUpperCase() + " et " +
+                        j1.getNom().toUpperCase() + " sont les 2 stun !!! \n";
+                message += "> Impact         : Les 2 combattant passe leur tour !";
             }
         }
         return message;
     }
-    public void lanceAttaque(Combattant att, Combattant cible, int niveauAttaque){
+    public int lanceAttaque(Combattant att, Combattant cible, int niveauAttaque){
+        int degats = 0;
         switch (niveauAttaque){
             case 1:
-                att.lanceAttaqueDebase(cible);
+                degats = att.lanceAttaqueDebase(cible);
                 break;
             case 2:
-                att.lanceAttaqueSpecial1(cible);
+                degats = att.lanceAttaqueSpecial1(cible);
                 break;
             case 3:
-                att.lanceAttaqueSpecial2(cible);
+                degats = att.lanceAttaqueSpecial2(cible);
                 break;
             case 4:
-                att.lanceAttaqueUltime(cible);
+                degats = att.lanceAttaqueUltime(cible);
                 break;
             default:
                 System.out.println("Erreur lance attaque");
                 break;
         }
+        return degats;
     }
     public void lancerCombatV2(){
         int round = 1;
         String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
         while(c1.estVivant && c2.estVivant){
-            Action actJ1 = selectionnerAction(c1, round, actionRoundPrecedent);
-            this.pause(1000);
-            Action actJ2 = selectionnerAction(c2, round, actionRoundPrecedent);
+            Action actJ1 = null;
+            Action actJ2 = null;
+            if(!c1.estEtourdi){
+                actJ1 = selectionnerAction(c1, round, actionRoundPrecedent);
+                this.pause(1000);
+            } else{
+                actJ1 = selectionnerAction(c1, round, actionRoundPrecedent);
+                this.pause(1000);
+            }
+            if(!c2.estEtourdi){
+                actJ2 = selectionnerAction(c2, round, actionRoundPrecedent);
+            } else{
+                actJ2 = selectionnerAction(c2, round, actionRoundPrecedent);
+            }
+            c1.desactiveStun();//methode de flemmard mais simple
+            c2.desactiveStun();//methode de flemmard mais simple
             actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
             round++;
         }
