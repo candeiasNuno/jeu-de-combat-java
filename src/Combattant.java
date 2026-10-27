@@ -12,7 +12,7 @@ abstract public class Combattant {
     protected boolean estEtourdi;
 
 /* CONSTRUCTEUR */
-    protected Combattant( String nom, int vie, int attaqueDeBase, int vitesse){
+    protected Combattant( String nom, int vie, int attaqueDeBase, int vitesse, int stunMax){
         this.nom = nom;
         this.vie = vie;
         this.attaqueDeBase = attaqueDeBase;
@@ -20,7 +20,7 @@ abstract public class Combattant {
         this.jaugeSpecial = 0;
         this.estVivant = true;
         this.vieMax = vie;
-        this.stunMax = 100;
+        this.stunMax = stunMax;
         this.estEtourdi = false;
         this.jaugeStun = 0;
     }
@@ -33,8 +33,9 @@ abstract public class Combattant {
         cible.recevoirDegats(this.attaqueDeBase);
         return this.attaqueDeBase;
     }
-    public void lanceChope(Combattant cible){
-        cible.recevoirDegats(this.attaqueDeBase * 2);
+    public int lanceChope(Combattant cible){
+        cible.recevoirDegats((int) (this.attaqueDeBase * 1.5));
+        return (int) (this.attaqueDeBase * 1.5);
     }
     public void recevoirDegats(int degats){
         if(this.vie - degats <= 0){
