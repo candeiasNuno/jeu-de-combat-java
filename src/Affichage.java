@@ -13,7 +13,7 @@ public class Affichage {
         System.out.println("╚" + "═".repeat(LARGEUR - 2) + "╝");
     }
     public static void separateur(){
-        System.out.println("║" + "═".repeat(LARGEUR - 2) + "║");
+        System.out.println("╠" + "═".repeat(LARGEUR - 2) + "╣");
     }
     public static void separateurDeuxColonnes() {
         System.out.println("╠" + "═".repeat(33) + "╦" + "═".repeat(34) + "╣");
@@ -97,6 +97,28 @@ public class Affichage {
                 tronquer(c5, 6),
                 tronquer(c6, 7),
                 tronquer(c7, 6));
+    }
+
+/* AFFICHAGE VICTOIRE */
+    public static void banniereEncadree(String texte) {
+        // Largeur totale du cadre intérieur (sur les 66 cases disponibles de LARGEUR_TEXTE)
+        int largeurCadre = 52;
+        int largeurInterieure = largeurCadre - 2; // 50 caractères entre les barres │...│
+        String texteSecurise = tronquer(texte, largeurInterieure - 4);
+        // Centrage du texte à l'intérieur du petit cadre
+        int espGauche = (largeurInterieure - texteSecurise.length()) / 2;
+        int espDroite = largeurInterieure - texteSecurise.length() - espGauche;
+        // Assemblage des 5 lignes du cadre
+        String bordureHaut = "┌" + "─".repeat(largeurInterieure) + "┐";
+        String ligneVide   = "│" + " ".repeat(largeurInterieure) + "│";
+        String ligneTexte  = "│" + " ".repeat(espGauche) + texteSecurise + " ".repeat(espDroite) + "│";
+        String bordureBas  = "└" + "─".repeat(largeurInterieure) + "┘";
+        // Affichage centré dans le grand cadre de 70 caractères
+        ligneCentree(bordureHaut);
+        ligneCentree(ligneVide);
+        ligneCentree(ligneTexte);
+        ligneCentree(ligneVide);
+        ligneCentree(bordureBas);
     }
 
 /* SECURITE ANTI-DÉBORDEMENTS */

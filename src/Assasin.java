@@ -43,5 +43,9 @@ public class Assasin extends Combattant{
         };
         return estimation;
     }
+    @Override public Combattant copieCombattant(){
+        Assasin copie = new Assasin(this.nom);
+        return copie;
+    }
 }
 

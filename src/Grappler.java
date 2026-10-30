@@ -60,5 +60,9 @@ public class Grappler extends Combattant{
         };
         return estimation;
     }
+    @Override public Combattant copieCombattant(){
+        Grappler copie = new Grappler(this.nom);
+        return copie;
+    }
 }
 

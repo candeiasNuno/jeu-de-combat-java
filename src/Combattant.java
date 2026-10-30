@@ -80,6 +80,7 @@ abstract public class Combattant {
     abstract public int lanceAttaqueSpecial2(Combattant cible);
     abstract public int lanceAttaqueUltime(Combattant cible);
     abstract public int estimationDegatInflige(int niveauAtt);
+    abstract public Combattant copieCombattant();
 
 
 /* GETTER */

@@ -53,5 +53,9 @@ public class Shoto extends Combattant {
         }
         return (int) (estimation * 1.5); //Passif
     }
+    @Override public Combattant copieCombattant(){
+        Shoto copie = new Shoto(this.nom);
+        return copie;
+    }
 
 }
