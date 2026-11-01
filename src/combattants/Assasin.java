@@ -1,3 +1,4 @@
+package combattants;
 public class Assasin extends Combattant{
 /* CONSTRUCTEUR */
     public Assasin(String nom){

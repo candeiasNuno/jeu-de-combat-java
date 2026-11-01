@@ -1,3 +1,4 @@
+package combattants;
 abstract public class Combattant {
 /* VARIABLES */
     protected String nom;
@@ -90,7 +91,6 @@ abstract public class Combattant {
     public int getVitesse() { return vitesse; }
     public int getJaugeSpecial() { return jaugeSpecial; }
     public boolean getEstVivant() { return estVivant; }
-    public boolean isEstVivant() { return estVivant; }
     public int getVieMax() { return vieMax; }
     public int getStunMax() { return stunMax;}
     public int getJaugeStun() { return jaugeStun;}

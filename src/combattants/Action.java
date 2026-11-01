@@ -1,10 +1,11 @@
+package combattants;
 public class Action {
 /* VARIABLES */
     protected String nomAction;
     protected int niveauAction;
 
 /* CONSTRUCTEUR */
-    Action(String nomAction, int niveauAction){
+    public Action(String nomAction, int niveauAction){
         this.nomAction = nomAction;
         this.niveauAction = niveauAction;
     }

@@ -1,5 +1,6 @@
+package ui;
 public class Affichage {
-    protected static final int LARGEUR = 70;
+    public static final int LARGEUR = 70;
     private static final int LARGEUR_TEXTE = LARGEUR - 4;
 
 /* AFFICHAGE CLASSIQUE */

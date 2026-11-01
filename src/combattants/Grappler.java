@@ -1,3 +1,4 @@
+package combattants;
 public class Grappler extends Combattant{
 /* VARIABLES */
     private int compteurCoups;

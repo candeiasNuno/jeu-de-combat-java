@@ -1,3 +1,4 @@
+package donnees;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -5,6 +6,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
+import combattants.Combattant;
+import combattants.Shoto;
+import combattants.Assasin;
+import combattants.Grappler;
+import moteur.Roster;
 
 public class Sauvegarde {
 

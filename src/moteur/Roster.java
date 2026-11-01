@@ -1,5 +1,7 @@
+package moteur;
 import java.util.List;
 import  java.util.ArrayList;
+import combattants.Combattant;
 
 public class Roster {
 /* VARIABLES */

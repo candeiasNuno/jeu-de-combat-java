@@ -1,5 +1,9 @@
-import javax.annotation.processing.SupportedSourceVersion;
+package moteur;
 import java.util.Scanner;
+import combattants.Combattant;
+import combattants.Action;
+import ui.Affichage;
+
 public class Arene {
 /* VARIABLES */
     private Combattant c1;
@@ -184,7 +188,7 @@ public class Arene {
         System.out.println(texteTourPrecedant);
         Affichage.ligneSimple();
         while(!choixFait){
-            if(c.estEtourdi){
+            if(c.isEstEtourdi()){
                 System.out.println("> " + c.getNom().toUpperCase() + ", est etourdi ! ");
                 this.pause(2000);
                 action = new Action("STUN", 0);
@@ -349,7 +353,7 @@ public class Arene {
     public void lancerCombatV2(){
         int round = 0;
         String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
-        while(c1.estVivant && c2.estVivant){
+        while(c1.getEstVivant() && c2.getEstVivant()){
             round++;
             Action actJ1 = null;
             Action actJ2 = null;
@@ -361,7 +365,7 @@ public class Arene {
             actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
         }
         Scanner scanner = new Scanner(System.in);
-        if(c1.estVivant){
+        if(c1.getEstVivant()){
             this.afficheVictoire2(c1, c2, round, actionRoundPrecedent);
             System.out.print("> Appuyez sur [Entrée] pour retourner au Menu Principal...  ");
             scanner.nextLine();

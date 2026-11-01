@@ -1,3 +1,4 @@
+package combattants;
 public class Shoto extends Combattant {
 /* CONSTRUCTEUR */
     public Shoto(String nom){
