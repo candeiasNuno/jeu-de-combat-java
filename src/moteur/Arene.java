@@ -4,10 +4,11 @@ import combattants.Combattant;
 import combattants.Action;
 import ui.Affichage;
 
+
 public class Arene {
 /* VARIABLES */
-    private Combattant c1;
-    private Combattant c2;
+    protected Combattant c1;
+    protected Combattant c2;
 
 /* CONSTRUCTEUR */
     public Arene(Combattant c1, Combattant c2){
@@ -357,9 +358,9 @@ public class Arene {
             round++;
             Action actJ1 = null;
             Action actJ2 = null;
-            actJ1 = selectionnerAction(c1, round, actionRoundPrecedent);
+            actJ1 = this.selectionnerAction(c1, round, actionRoundPrecedent);
             this.pause(1000);
-            actJ2 = selectionnerAction(c2, round, actionRoundPrecedent);
+            actJ2 = this.selectionnerAction(c2, round, actionRoundPrecedent);
             c1.desactiveStun();//methode de flemmard mais simple
             c2.desactiveStun();//methode de flemmard mais simple
             actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
