@@ -1,18 +1,25 @@
 package ia;
 import combattants.Combattant;
 import combattants.Action;
+
+import java.util.List;
 import java.util.Random;
 
 public class IA {
 /* METHODES */
-    public Action choisirActionIa(Combattant ia){
+    public static Action choisirActionIa(Combattant ia){
         Action act = null;
-        Random generateur = new Random();
-        int aleatoire = generateur.nextInt(100) + 1; // Genre un chiffre entre 1 - 100
-        act = choixActionAleatoire(aleatoire, ia.getJaugeSpecial());
+        if(ia.isEstEtourdi()){
+            act = new Action("STUN", 0);
+        } else{
+            Random generateur = new Random();
+            int aleatoire = generateur.nextInt(100) + 1; // Genre un chiffre entre 1 - 100
+            act = choixActionAleatoire(aleatoire, ia.getJaugeSpecial());
+            return act;
+        }
         return act;
     }
-    public Action choixActionAleatoire(int proba, int jauge){
+    public static Action choixActionAleatoire(int proba, int jauge){
         Action act = null;
         switch (jauge) {
             case 0:
@@ -32,7 +39,7 @@ public class IA {
                 } else if(proba <= 80){
                     act = new Action("GARDE", 1); // 20% garde
                 } else{
-                    act = new Action("CHOPE", 1); // 10% chope
+                    act = new Action("CHOPE", 1); // 20% chope
                 }
                 break;
             case 2:
@@ -62,10 +69,17 @@ public class IA {
                 } else{
                     act = new Action("GARDE", 1); // 10% garde
                 }
+                break;
             default:
                 break;
         }
         return act;
+    }
+    public static Combattant choixCombattantAleatoire(List<Combattant> roster){
+        Random generateur = new Random();
+        int idAleatoire = generateur.nextInt(roster.size());
+        Combattant c = roster.get(idAleatoire).copieCombattant();
+        return c;
     }
 
 }

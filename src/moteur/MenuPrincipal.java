@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import combattants.Combattant;
 import donnees.Sauvegarde;
+import ia.IA;
 import ui.Affichage;
 
 public class MenuPrincipal {
@@ -50,11 +51,13 @@ public class MenuPrincipal {
         Affichage.saut();
         texte = "[ 1 ] Lancer un Combat (Versus)";
         Affichage.ligne(texte);
-        texte = "[ 2 ] Afficher les Combattants (Roster)";
+        texte = "[ 2 ] Lancer un Combat contre IA (Versus)";
         Affichage.ligne(texte);
-        texte = "[ 3 ] Afficher les Regles du Combat";
+        texte = "[ 3 ] Afficher les Combattants (Roster)";
         Affichage.ligne(texte);
-        texte = "[ 4 ] Quitter le jeu";
+        texte = "[ 4 ] Afficher les Regles du Combat";
+        Affichage.ligne(texte);
+        texte = "[ 5 ] Quitter le jeu";
         Affichage.ligne(texte);
         Affichage.saut();
         Affichage.bas();
@@ -118,6 +121,14 @@ public class MenuPrincipal {
                 combat1.lancerCombatV2();
                 break;
             case 2:
+                Combattant j1 = this.choixCombattant(1);
+                Combattant jIa = IA.choixCombattantAleatoire(this.roster.getRoster());
+                Affichage.clear();
+                this.pause(2000);
+                AreneIa combat = new AreneIa(j1, jIa);
+                combat.lancerCombatV2();
+                break;
+            case 3:
                 boolean dansRoster = true;
                 while(dansRoster){
                     this.affichageRosterV2();
@@ -138,7 +149,7 @@ public class MenuPrincipal {
 
                 }
                 break;
-            case 3:
+            case 4:
                 boolean dansRegles = true;
                 while(dansRegles){
                     this.affichageRegles();
@@ -159,7 +170,7 @@ public class MenuPrincipal {
 
                 }
                 break;
-            case 4:
+            case 5:
                 this.jeuEnCours = false;
                 System.out.println(" > MERCI D\'AVOIR JOUE A NOTRE JEU!");
                 break;
