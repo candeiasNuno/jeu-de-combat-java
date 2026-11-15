@@ -3,6 +3,7 @@ import java.util.Scanner;
 import combattants.Combattant;
 import combattants.Action;
 import ui.Affichage;
+import enums.TypeAction;
 
 
 public class Arene {
@@ -138,22 +139,22 @@ public class Arene {
         Action action = null;
         switch (choix){
             case 1:
-                action = new Action("Attaque", 1);
+                action = new Action(TypeAction.ATTAQUE, 1);
                 break;
             case 2:
-                action = new Action("Garde", 1);
+                action = new Action(TypeAction.GARDE, 1);
                 break;
             case 3:
-                action = new Action("Chope", 1);
+                action = new Action(TypeAction.CHOPE, 1);
                 break;
             case 4:
-                action = new Action("Attaque", 2);
+                action = new Action(TypeAction.ATTAQUE, 2);
                 break;
             case 5:
-                action = new Action("Attaque", 3);
+                action = new Action(TypeAction.ATTAQUE, 3);
                 break;
             case 6:
-                action = new Action("Attaque", 4);
+                action = new Action(TypeAction.ATTAQUE, 4);
                 break;
             default:
                 System.out.println("Erreur creation d action");
@@ -192,7 +193,7 @@ public class Arene {
             if(c.isEstEtourdi()){
                 System.out.println("> " + c.getNom().toUpperCase() + ", est etourdi ! ");
                 this.pause(2000);
-                action = new Action("STUN", 0);
+                action = new Action(TypeAction.STUN, 0);
                 break;
             }
             String prompt = "> " + c.getNom().toUpperCase() + ", choisissez votre action (1-" + maxDispo + ") : ";
@@ -208,29 +209,29 @@ public class Arene {
 
     }
     public String resoudreCroisement(Action act1, Combattant j1, Action act2, Combattant j2){
-        String actionJ1 = act1.getNomAction().toUpperCase();
+        TypeAction actionJ1 = act1.getNomAction();
         int niveauActJ1 = act1.getNiveauAction();
-        String actionJ2 = act2.getNomAction().toUpperCase();
+        TypeAction actionJ2 = act2.getNomAction();
         int niveauActJ2 = act2.getNiveauAction();
         int degatStun;
         int degats;
         String message = "> Duel precedent : " + j1.getNom().toUpperCase() + " [" + actionJ1 + "][" + niveauActJ1 + "] ◄── VS ──► " +
                 j2.getNom().toUpperCase() + " [" + actionJ2 + "][" + niveauActJ2 + "] \n";
 
-        if(actionJ1.equals("ATTAQUE")){
-            if(actionJ2.equals("CHOPE")){
+        if(actionJ1 == TypeAction.ATTAQUE){
+            if(actionJ2 == TypeAction.CHOPE){
                 degats = this.lanceAttaque(j1, j2, niveauActJ1);
                 message += "> Verdict        : [COUNTER HIT - INTERROMPU !] " + j1.getNom().toUpperCase() + " frappe " +
                         j2.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
                 message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
-            } else if(actionJ2.equals("GARDE")){
+            } else if(actionJ2 == TypeAction.GARDE){
                 degatStun = j1.estimationDegatInflige(niveauActJ1);
                 j1.consomation(niveauActJ1);
                 j2.recevoirStun(degatStun);
                 message += "> Verdict        : [GARDE PARFAITE !] " + j2.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
                 message += "> Impact         : " + j2.getNom().toUpperCase() + " gagne 1 de jauge Special et subit " + degatStun + " de degats de stun.";
                 j2.recevoirJaugeSpecial(1);
-            } else if(actionJ2.equals("ATTAQUE")){
+            } else if(actionJ2 == TypeAction.ATTAQUE){
                 if(niveauActJ1 > niveauActJ2){
                     degats = this.lanceAttaque(j1, j2, niveauActJ1);
                     message += "> Verdict        : [CRUNCH - ECRASEMENT !] " + j1.getNom().toUpperCase() + " ecrase l\'attaque de " +
@@ -258,71 +259,71 @@ public class Arene {
                         message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
                     }
                 }
-            } else if(actionJ2.equals("STUN")){
+            } else if(actionJ2 == TypeAction.STUN){
                 degats = this.lanceAttaque(j1, j2, niveauActJ1);
                 message += "> Verdict        : [FREE HIT !] " + j1.getNom().toUpperCase() + " frappe " +
                         j2.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
                 message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
             }
-        } else if(actionJ1.equals("GARDE")){
-            if(actionJ2.equals("ATTAQUE")){
+        } else if(actionJ1 == TypeAction.GARDE){
+            if(actionJ2 == TypeAction.ATTAQUE){
                 degatStun = j2.estimationDegatInflige(niveauActJ2);
                 j2.consomation(niveauActJ2);
                 j1.recevoirStun(degatStun);
                 message += "> Verdict        : [GARDE PARFAITE !] " + j1.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
                 message += "> Impact         : " + j1.getNom().toUpperCase() + " gagne 1 de jauge Special et subit " + degatStun + " de degats de stun.";
                 j1.recevoirJaugeSpecial(1);
-            } else if(actionJ2.equals("CHOPE")){
+            } else if(actionJ2 == TypeAction.CHOPE){
                 degats = j2.lanceChope(j1);
                 message += "> Verdict        : [BRISE-GARDE !] " + j2.getNom().toUpperCase() + " attrape " + j1.getNom().toUpperCase() +
                         " a travers sa Garde et l'envoi au sol !\n";
                 message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
-            } else if(actionJ2.equals("GARDE")){
+            } else if(actionJ2 == TypeAction.GARDE){
                 message += "> Verdict        : [OBSERVATION !] " + j1.getNom().toUpperCase() + " et " +
                         j2.getNom().toUpperCase() + " reste les 2 en garde et s\'observe ! \n";
                 message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
-            } else if(actionJ2.equals("STUN")){
+            } else if(actionJ2 == TypeAction.STUN){
                 message += "> Verdict        : [OCCASION MANQUE !] " + j1.getNom().toUpperCase() + " observe " +
                         j2.getNom().toUpperCase() + " alors qu\'il est stun ! \n";
                 message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
             }
-        } else if(actionJ1.equals("CHOPE")){
-            if(actionJ2.equals("GARDE")){
+        } else if(actionJ1 == TypeAction.CHOPE){
+            if(actionJ2 == TypeAction.GARDE){
                 degats = j1.lanceChope(j2);
                 message += "> Verdict        : [BRISE-GARDE !] " + j1.getNom().toUpperCase() + " attrape " + j2.getNom().toUpperCase() +
                         " a travers sa Garde et l'envoi au sol !\n";
                 message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
-            } else if(actionJ2.equals("ATTAQUE")){
+            } else if(actionJ2 == TypeAction.ATTAQUE){
                 degats = this.lanceAttaque(j2, j1, niveauActJ2);
                 message += "> Verdict        : [COUNTER HIT - INTERROMPU !] " + j2.getNom().toUpperCase() + " frappe " +
                         j1.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
                 message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
-            } else if(actionJ2.equals("CHOPE")){
+            } else if(actionJ2 == TypeAction.CHOPE){
                 message += "> Verdict        : [TECH - ANNULATION !] " + j1.getNom().toUpperCase() + " et " +
                         j2.getNom().toUpperCase() + " tente une chope en meme temps et se neutralise ! \n";
                 message += "> Impact         : Les 2 chope s\'annule !";
-            } else if(actionJ2.equals("STUN")){
+            } else if(actionJ2 == TypeAction.STUN){
                 degats = j1.lanceChope(j2);
                 message += "> Verdict        : [FREE CHOPE !] " + j1.getNom().toUpperCase() + " chope " +
                         j2.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
                 message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
             }
-        } else if(actionJ1.equals("STUN")){
-            if(actionJ2.equals("ATTAQUE")){
+        } else if(actionJ1 == TypeAction.STUN){
+            if(actionJ2 == TypeAction.ATTAQUE){
                 degats = this.lanceAttaque(j2, j1, niveauActJ2);
                 message += "> Verdict        : [FREE HIT !] " + j2.getNom().toUpperCase() + " frappe " +
                         j1.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
                 message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
-            } else if(actionJ2.equals("GARDE")){
+            } else if(actionJ2 == TypeAction.GARDE){
                 message += "> Verdict        : [OCCASION MANQUE !] " + j2.getNom().toUpperCase() + " observe " +
                         j1.getNom().toUpperCase() + " alors qu\'il est stun ! \n";
                 message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
-            } else if(actionJ2.equals("CHOPE")){
+            } else if(actionJ2 == TypeAction.CHOPE){
                 degats = j2.lanceChope(j1);
                 message += "> Verdict        : [FREE CHOPE !] " + j2.getNom().toUpperCase() + " chope " +
                         j1.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
                 message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
-            } else if(actionJ2.equals("STUN")){
+            } else if(actionJ2 == TypeAction.STUN){
                 message += "> Verdict        : [DOUBLE STUN !] " + j2.getNom().toUpperCase() + " et " +
                         j1.getNom().toUpperCase() + " sont les 2 stun !!! \n";
                 message += "> Impact         : Les 2 combattant passe leur tour !";

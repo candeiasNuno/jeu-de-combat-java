@@ -1,6 +1,7 @@
 package ia;
 import combattants.Combattant;
 import combattants.Action;
+import enums.TypeAction;
 
 import java.util.List;
 import java.util.Random;
@@ -10,7 +11,7 @@ public class IA {
     public static Action choisirActionIa(Combattant ia){
         Action act = null;
         if(ia.isEstEtourdi()){
-            act = new Action("STUN", 0);
+            act = new Action(TypeAction.STUN, 0);
         } else{
             Random generateur = new Random();
             int aleatoire = generateur.nextInt(100) + 1; // Genre un chiffre entre 1 - 100
@@ -24,50 +25,50 @@ public class IA {
         switch (jauge) {
             case 0:
                 if(proba <= 50){
-                    act = new Action("GARDE", 1); // 50% garde
+                    act = new Action(TypeAction.GARDE, 1); // 50% garde
                 } else if(proba <= 80){
-                    act = new Action("ATTAQUE", 1); // 30% attaque 1
+                    act = new Action(TypeAction.ATTAQUE, 1); // 30% attaque 1
                 } else{
-                    act = new Action("CHOPE", 1); // 20% chope
+                    act = new Action(TypeAction.CHOPE, 1); // 20% chope
                 }
                 break;
             case 1:
                 if(proba <= 30){
-                    act = new Action("ATTAQUE", 2); // 30% attaque 2
+                    act = new Action(TypeAction.ATTAQUE, 2); // 30% attaque 2
                 } else if(proba <= 60){
-                    act = new Action("ATTAQUE", 1); // 30% attaque 1
+                    act = new Action(TypeAction.ATTAQUE, 1); // 30% attaque 1
                 } else if(proba <= 80){
-                    act = new Action("GARDE", 1); // 20% garde
+                    act = new Action(TypeAction.GARDE, 1); // 20% garde
                 } else{
-                    act = new Action("CHOPE", 1); // 20% chope
+                    act = new Action(TypeAction.CHOPE, 1); // 20% chope
                 }
                 break;
             case 2:
                 if(proba <= 30){
-                    act = new Action("ATTAQUE", 3); // 30% attaque 3
+                    act = new Action(TypeAction.ATTAQUE, 3); // 30% attaque 3
                 } else if(proba <= 50){
-                    act = new Action("ATTAQUE", 2); // 20% attaque 2
+                    act = new Action(TypeAction.ATTAQUE, 2); // 20% attaque 2
                 } else if(proba <= 70){
-                    act = new Action("ATTAQUE", 1); // 20% attaque 1
+                    act = new Action(TypeAction.ATTAQUE, 1); // 20% attaque 1
                 } else if(proba <= 90){
-                    act = new Action("GARDE", 1); // 20% garde
+                    act = new Action(TypeAction.GARDE, 1); // 20% garde
                 } else{
-                    act = new Action("CHOPE", 1); // 10% chope
+                    act = new Action(TypeAction.CHOPE, 1); // 10% chope
                 }
                 break;
             case 3:
                 if(proba <= 50){
-                    act = new Action("ATTAQUE", 4); // 50% attaque 4
+                    act = new Action(TypeAction.ATTAQUE, 4); // 50% attaque 4
                 } else if(proba <= 60){
-                    act = new Action("ATTAQUE", 3); // 10% attaque 3
+                    act = new Action(TypeAction.ATTAQUE, 3); // 10% attaque 3
                 } else if(proba <= 70){
-                    act = new Action("ATTAQUE", 2); // 10% attaque 2
+                    act = new Action(TypeAction.ATTAQUE, 2); // 10% attaque 2
                 } else if(proba <= 80){
-                    act = new Action("ATTAQUE", 1); // 10% attaque 1
+                    act = new Action(TypeAction.ATTAQUE, 1); // 10% attaque 1
                 } else if(proba <= 90){
-                    act = new Action("CHOPE", 1); // 10% chope
+                    act = new Action(TypeAction.CHOPE, 1); // 10% chope
                 } else{
-                    act = new Action("GARDE", 1); // 10% garde
+                    act = new Action(TypeAction.GARDE, 1); // 10% garde
                 }
                 break;
             default:
