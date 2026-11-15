@@ -62,6 +62,44 @@ public class MenuPrincipal {
         Affichage.saut();
         Affichage.bas();
     }
+    public void affichageHubV3(){
+        String texte;
+        String texte2;
+
+        Affichage.clear();
+        Affichage.haut();
+        texte = "===  T O U R N O I  M A R T I A L  ===";
+        Affichage.ligneCentree(texte);
+        texte = "-- Edition Terminal V2 --";
+        Affichage.ligneCentree(texte);
+        Affichage.separateurMenuHaut();
+        texte = "> MODES D'AFFRONTEMENT (VERSUS)";
+        texte2 = "[ 1 ] Duel Local (J1 vs J2)";
+        Affichage.deuxColonnes(texte, texte2);
+        texte = "";
+        texte2 = "[ 2 ] Duel IA (J1 vs IA)";
+        Affichage.deuxColonnes(texte, texte2);
+        Affichage.separateurMenuMilieu();
+        texte = "> MODE HISTOIRE";
+        texte2 = "[ 3 ] Lancer le Mode Histoire";
+        Affichage.deuxColonnes(texte, texte2);
+        texte = "";
+        texte2 = "          (Bientôt disponibles)";
+        Affichage.deuxColonnes(texte, texte2);
+        Affichage.separateurMenuMilieu();
+        texte = "> ARCHIVES ET CONFIGURATION";
+        texte2 = "[ 4 ] Affichage du Roster";
+        Affichage.deuxColonnes(texte, texte2);
+        texte = "";
+        texte2 = "[ 5 ] Regles & Triangle Tactique";
+        Affichage.deuxColonnes(texte, texte2);
+        texte2 = "[ 6 ] Quitter le programme";
+        Affichage.deuxColonnes(texte, texte2);
+        Affichage.basMenu();
+
+
+
+    }
     public void affichageRosterV2(){
         String texte;
         Affichage.clear();
@@ -129,6 +167,8 @@ public class MenuPrincipal {
                 combat.lancerCombatV2();
                 break;
             case 3:
+                break;
+            case 4:
                 boolean dansRoster = true;
                 while(dansRoster){
                     this.affichageRosterV2();
@@ -146,10 +186,9 @@ public class MenuPrincipal {
                         sc.next();
                         this.pause(1000);
                     }
-
                 }
                 break;
-            case 4:
+            case 5:
                 boolean dansRegles = true;
                 while(dansRegles){
                     this.affichageRegles();
@@ -170,7 +209,7 @@ public class MenuPrincipal {
 
                 }
                 break;
-            case 5:
+            case 6:
                 this.jeuEnCours = false;
                 System.out.println(" > MERCI D\'AVOIR JOUE A NOTRE JEU!");
                 break;
@@ -220,7 +259,7 @@ public class MenuPrincipal {
         Scanner sc = new Scanner(System.in);
         int repMenuPrincipal;
         while(this.jeuEnCours){
-            this.affichageHubV2();
+            this.affichageHubV3();
             System.out.print(" > Que voulez-vous faire ? : ");
             if(sc.hasNextInt()){
                 repMenuPrincipal = sc.nextInt();

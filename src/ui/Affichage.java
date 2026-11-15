@@ -33,6 +33,16 @@ public class Affichage {
         System.out.flush();
     }
 
+    public static void separateurMenuHaut() {
+        System.out.println("╠" + "═".repeat(33) + "╦" + "═".repeat(34) + "╣");
+    }
+    public static void separateurMenuMilieu() {
+        System.out.println("╠" + "═".repeat(33) + "╬" + "═".repeat(34) + "╣");
+    }
+    public static void basMenu() {
+        System.out.println("╚" + "═".repeat(33) + "╩" + "═".repeat(34) + "╝");
+    }
+
 /* AFFICHAGE AVEC TEXTE */
     public static void ligne(String texte) {
         System.out.printf("║ %-" + LARGEUR_TEXTE + "s ║%n", tronquer(texte, LARGEUR_TEXTE));
@@ -57,6 +67,10 @@ public class Affichage {
     }
     public static void deuxColonnes(String gauche, String droite) {
         System.out.printf("║ %-31s ║ %-32s ║%n", tronquer(gauche, 31), tronquer(droite, 32));
+    }
+    public static void ligneVideMenu() {
+        // 1 bordure + 33 espaces + 1 bordure + 34 espaces + 1 bordure = 70 caractères
+        System.out.println("║" + " ".repeat(33) + "║" + " ".repeat(34) + "║");
     }
 
 /* BARRE VISUELLES DYNAMIQUES */
