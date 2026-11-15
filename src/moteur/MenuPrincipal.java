@@ -251,6 +251,8 @@ public class MenuPrincipal {
         Affichage.ligne(texte);
         texte = "   • GRAPPLER : Chope boostée (+1SP/+Stun) | Sp1 +Stun | Sp2 Soin";
         Affichage.ligne(texte);
+        texte = "   • ZONER    : Degats Stun boost | SP2 -2sp | SP3 -3SP et STUN";
+        Affichage.ligne(texte);
         Affichage.bas();
 
 
