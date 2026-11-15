@@ -11,9 +11,10 @@ import combattants.Shoto;
 import combattants.Assasin;
 import combattants.Grappler;
 import moteur.Roster;
+import combattants.Zoner;
 
 public class Sauvegarde {
-
+/* METHODES */
     public void sauvegardeRoster(Roster roster){
         Path chemin = Paths.get("sauvegarde_roster.csv");
         List<String> lignesAEcrire = new ArrayList<>();
@@ -33,7 +34,6 @@ public class Sauvegarde {
             System.out.println("Erreur grave lors de la sauvegarde du roster : " + e.getMessage());
         }
     }
-
     public Roster chargerRoster(){
         Roster ros = new Roster();
         Path chemin = Paths.get("sauvegarde_roster.csv");
@@ -60,6 +60,9 @@ public class Sauvegarde {
                         break;
                     case "Grappler":
                         combattant = new Grappler(nomCombattant);
+                        break;
+                    case "Zoner":
+                        combattant = new Zoner(nomCombattant);
                         break;
                     default:
                         System.out.println("Classe inconnue : " + typeCombattant);
