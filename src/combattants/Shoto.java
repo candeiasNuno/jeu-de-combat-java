@@ -4,6 +4,9 @@ public class Shoto extends Combattant {
     public Shoto(String nom){
         super(nom, 100, 10, 50, 100 );
     }
+    public Shoto(String nom, int vie,  int attaqueDeBase, int vitesse, int stunMax){
+        super(nom, vie, attaqueDeBase, vitesse, stunMax);
+    }
 
 /* METHODES */
     @Override public int lanceAttaqueSpecial1(Combattant cible){
@@ -58,5 +61,6 @@ public class Shoto extends Combattant {
         Shoto copie = new Shoto(this.nom);
         return copie;
     }
+    @Override public String getArchetype() { return "Shoto";}
 
 }

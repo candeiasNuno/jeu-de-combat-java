@@ -114,7 +114,7 @@ public class MenuPrincipal {
             Affichage.septColonnes(
                     "[" + i + "]",
                     c.getNom().toUpperCase(),
-                    c.getClass().getSimpleName(),
+                    c.getArchetype(),
                     String.valueOf(c.getVieMax()),
                     String.valueOf(c.getAttaqueDeBase()),
                     String.valueOf(c.getVitesse()),

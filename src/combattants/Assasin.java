@@ -48,5 +48,6 @@ public class Assasin extends Combattant{
         Assasin copie = new Assasin(this.nom);
         return copie;
     }
+    @Override public String getArchetype() { return "Assasin";}
 }
 

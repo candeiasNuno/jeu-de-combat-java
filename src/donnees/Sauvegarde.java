@@ -10,6 +10,7 @@ import combattants.Combattant;
 import combattants.Shoto;
 import combattants.Assasin;
 import combattants.Grappler;
+import combattants.shoto.Luke;
 import moteur.Roster;
 import combattants.Zoner;
 
@@ -22,7 +23,7 @@ public class Sauvegarde {
         // Transformation des objets en format texte (CSV)
         for (Combattant c : roster.getRoster()){
             String ligne = c.getClass().getSimpleName() + ";" + c.getNom() + ";" + c.getVie() + ";" + c.getAttaqueDeBase() + ";"
-                    + c.getVitesse() + ";" + c.getJaugeSpecial() + ";" + c.getEstVivant();
+                    + c.getVitesse() + ";" + c.getStunMax() + ";" + c.getJaugeSpecial() + ";" + c.getEstVivant();
             lignesAEcrire.add(ligne);
         }
 
@@ -47,6 +48,12 @@ public class Sauvegarde {
 
                 String typeCombattant = morceaux[0];
                 String nomCombattant = morceaux[1];
+                String vieCombattant = morceaux[2];
+                String attaqueDeBaseCombattant = morceaux[3];
+                String vitesseCombattant = morceaux[4];
+                String stunMax = morceaux[5];
+                String jaugeSpecial = morceaux[6];
+                String vivant = morceaux[7];
 
                 Combattant combattant = null;
 
@@ -63,6 +70,10 @@ public class Sauvegarde {
                         break;
                     case "Zoner":
                         combattant = new Zoner(nomCombattant);
+                        break;
+                    case "Luke":
+                        combattant = new Luke(Integer.parseInt(vieCombattant), Integer.parseInt(attaqueDeBaseCombattant), Integer.parseInt(vitesseCombattant),
+                                Integer.parseInt(stunMax));
                         break;
                     default:
                         System.out.println("Classe inconnue : " + typeCombattant);

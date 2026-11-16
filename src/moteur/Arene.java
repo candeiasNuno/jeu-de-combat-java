@@ -354,6 +354,8 @@ public class Arene {
     }
     public void lancerCombatV2(){
         int round = 0;
+        this.c1.reinitialiseBonusAttaque();
+        this.c2.reinitialiseBonusAttaque();
         String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
         while(c1.getEstVivant() && c2.getEstVivant()){
             round++;

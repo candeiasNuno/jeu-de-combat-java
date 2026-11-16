@@ -48,4 +48,5 @@ public class Zoner extends Combattant{
         Zoner copie = new Zoner(this.nom);
         return copie;
     }
+    @Override public String getArchetype() { return "Zoner";}
 }

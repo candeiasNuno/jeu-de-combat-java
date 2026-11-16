@@ -11,6 +11,7 @@ abstract public class Combattant {
     protected int stunMax;
     protected int jaugeStun;
     protected boolean estEtourdi;
+    protected int bonusAttaque;
 
 /* CONSTRUCTEUR */
     protected Combattant( String nom, int vie, int attaqueDeBase, int vitesse, int stunMax){
@@ -24,6 +25,7 @@ abstract public class Combattant {
         this.stunMax = stunMax;
         this.estEtourdi = false;
         this.jaugeStun = 0;
+        this.bonusAttaque = 0;
     }
 
 /* METHODES */
@@ -77,23 +79,25 @@ abstract public class Combattant {
             this.vie += nb;
         }
     }
+    public void reinitialiseBonusAttaque(){ this.bonusAttaque = 0; }
     abstract public int lanceAttaqueSpecial1(Combattant cible);
     abstract public int lanceAttaqueSpecial2(Combattant cible);
     abstract public int lanceAttaqueUltime(Combattant cible);
     abstract public int estimationDegatInflige(int niveauAtt);
     abstract public Combattant copieCombattant();
+    abstract public String getArchetype();
 
 
 /* GETTER */
-    public String getNom() { return nom; }
-    public int getVie() { return vie; }
-    public int getAttaqueDeBase() { return attaqueDeBase; }
-    public int getVitesse() { return vitesse; }
-    public int getJaugeSpecial() { return jaugeSpecial; }
-    public boolean getEstVivant() { return estVivant; }
-    public int getVieMax() { return vieMax; }
-    public int getStunMax() { return stunMax;}
-    public int getJaugeStun() { return jaugeStun;}
-    public boolean isEstEtourdi() { return estEtourdi; }
-
+    public String getNom() { return this.nom; }
+    public int getVie() { return this.vie; }
+    public int getAttaqueDeBase() { return this.attaqueDeBase; }
+    public int getVitesse() { return this.vitesse; }
+    public int getJaugeSpecial() { return this.jaugeSpecial; }
+    public boolean getEstVivant() { return this.estVivant; }
+    public int getVieMax() { return this.vieMax; }
+    public int getStunMax() { return this.stunMax;}
+    public int getJaugeStun() { return this.jaugeStun;}
+    public boolean isEstEtourdi() { return this.estEtourdi; }
+    public int getBoostAttaque(){ return this.bonusAttaque; }
 }

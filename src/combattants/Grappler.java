@@ -65,5 +65,6 @@ public class Grappler extends Combattant{
         Grappler copie = new Grappler(this.nom);
         return copie;
     }
+    @Override public String getArchetype() { return "Grappler";}
 }
 
