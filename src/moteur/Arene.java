@@ -331,6 +331,20 @@ public class Arene {
         }
         return message;
     }
+    /*public String resoudreCroisementV2(Action act1, Combattant c1, Action act2, Combattant c2){
+        TypeAction actionJ1 = act1.getNomAction();
+        int niveauActJ1 = act1.getNiveauAction();
+        TypeAction actionJ2 = act2.getNomAction();
+        int niveauActJ2 = act2.getNiveauAction();
+        String resDuel = "> Duel precedent : " + c1.getNom().toUpperCase() + " [" + actionJ1 + "][" + niveauActJ1 + "] ◄── VS ──► " +
+                c2.getNom().toUpperCase() + " [" + actionJ2 + "][" + niveauActJ2 + "] \n";
+
+        if(actionJ1 == TypeAction.ATTAQUE){
+            if(actionJ2 == TypeAction.GARDE){
+                c1.resoudreAttaqueVsGarde(niveauActJ1, c2);
+            }
+        }
+    }*/
     public int lanceAttaque(Combattant att, Combattant cible, int niveauAttaque){
         int degats = 0;
         switch (niveauAttaque){

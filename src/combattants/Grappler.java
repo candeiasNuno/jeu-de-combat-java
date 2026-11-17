@@ -1,4 +1,6 @@
 package combattants;
+import moteur.RapportAction;
+
 public class Grappler extends Combattant{
 /* VARIABLES */
     private int compteurCoups;
@@ -10,46 +12,50 @@ public class Grappler extends Combattant{
     }
 
 /* METHODES */
-    @Override public int lanceAttaqueDebase(Combattant cible){
+    @Override public RapportAction lanceAttaqueDebase(Combattant cible){
         this.compteurCoups++;
         if(compteurCoups >=2 && this.jaugeSpecial < 3){
-            this.jaugeSpecial++;
+            this.recevoirJaugeSpecial(1);
             this.compteurCoups = 0;
         }
-        cible.recevoirDegats(this.attaqueDeBase);
-        return this.attaqueDeBase;
+        return new RapportAction(this.attaqueDeBase, 0, 0, 0, "Gros coup de poing",
+                null, null);
     }
-    @Override public int lanceChope(Combattant cible){
-        cible.recevoirDegats(this.attaqueDeBase * 2);
-        cible.recevoirStun(25);
+    @Override public RapportAction lanceChope(Combattant cible){
+        int degats = this.attaqueDeBase * 2;
+        int degatsStun = 25;
         this.recevoirJaugeSpecial(1);
-        return this.attaqueDeBase * 2;
+        return new RapportAction(degats, degatsStun, 0, 0, "Super Chope",
+                null, null);
     }
-    @Override public int lanceAttaqueSpecial1(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
         if (this.jaugeSpecial >= 1 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 1.6));
             this.jaugeSpecial --;
-            cible.recevoirStun(40);
-            return (int) (this.attaqueDeBase * 1.6);
+            int degats = (int) (this.attaqueDeBase * 1.6);
+            int degatsStun = 40;
+            return new RapportAction(degats, degatsStun, 0, 0, "Special 1",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueSpecial2(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
         if (this.jaugeSpecial >= 2 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 2.4));
+            int degats = (int) (this.attaqueDeBase * 2.4);
             this.jaugeSpecial -= 2;
-            this.soigne(10);
-            return (int) (this.attaqueDeBase * 2.4);
+             this.soigne(10);
+            return new RapportAction(degats, 0, 0, 0, "Special 2",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueUltime(Combattant cible){
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
         if (this.jaugeSpecial >= 3 ){
-            cible.recevoirDegats(this.attaqueDeBase * 4);
+            int degats = this.attaqueDeBase * 4;
             this.jaugeSpecial -= 3;
-            return this.attaqueDeBase * 4;
+            return new RapportAction(degats, 0, 0, 0, "Ultime",
+                    null, null);
         }
-        return 0;
+        return null;
     }
     @Override public int estimationDegatInflige(int niveauAtt){
         int estimation = switch (niveauAtt) {

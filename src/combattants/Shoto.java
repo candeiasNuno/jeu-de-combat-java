@@ -1,4 +1,7 @@
 package combattants;
+
+import moteur.RapportAction;
+
 public class Shoto extends Combattant {
 /* CONSTRUCTEUR */
     public Shoto(String nom){
@@ -9,32 +12,35 @@ public class Shoto extends Combattant {
     }
 
 /* METHODES */
-    @Override public int lanceAttaqueSpecial1(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
         if (this.jaugeSpecial >= 1 ){
-            cible.recevoirDegats(this.attaqueDeBase * 2);
             this.jaugeSpecial --;
-            cible.recevoirStun(15);//Capacite Special1
-            return this.attaqueDeBase * 2;
+            int degats = this.attaqueDeBase * 2;
+            int degatsStun = 15; //Capacite Special1
+            return new RapportAction(degats, degatsStun, 0, 0, "Projectil",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueSpecial2(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
         if (this.jaugeSpecial >= 2 ){
-            cible.recevoirDegats(this.attaqueDeBase * 3);
             this.jaugeSpecial -= 2;
-            this.recevoirJaugeSpecial(1);//capacite Special 2
-            return this.attaqueDeBase * 3;
+            int degats = this.attaqueDeBase * 3;
+            this.recevoirJaugeSpecial(1); //capacite Special 2
+            return new RapportAction(degats, 0, 0, 0, "rush kick",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueUltime(Combattant cible){
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
         if (this.jaugeSpecial >= 3 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 4.5));
             this.jaugeSpecial -= 3;
+            int degats = (int) (this.attaqueDeBase * 4.5);
             this.jaugeStun = 0; //capacite ultime
-            return (int) (this.attaqueDeBase * 4.5);
+            return new RapportAction(degats, 0, 0, 0, "Super projectil",
+                    null, null);
         }
-        return 0;
+        return null;
     }
     @Override public int estimationDegatInflige(int niveauAtt){
         int estimation;

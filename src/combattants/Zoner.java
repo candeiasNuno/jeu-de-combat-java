@@ -1,5 +1,7 @@
 package combattants;
 
+import moteur.RapportAction;
+
 public class Zoner extends Combattant{
 /* CONSTRUCTEUR */
     public Zoner(String nom){
@@ -7,32 +9,35 @@ public class Zoner extends Combattant{
     }
 
 /* METHODES */
-    @Override public int lanceAttaqueSpecial1(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
         if (this.jaugeSpecial >= 1 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 2.5));
             this.jaugeSpecial --;
-            return ((int) (this.attaqueDeBase * 2.5)) ;
+            int degats = (int) (this.attaqueDeBase * 2.5);
+            return new RapportAction(degats, 0, 0, 0, "Mine explosif",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueSpecial2(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
         if (this.jaugeSpecial >= 2 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 1.5));
-            cible.consomation(2);
             this.jaugeSpecial -= 2;
-            return (int) (this.attaqueDeBase * 1.5);
+            int degats = (int) (this.attaqueDeBase * 1.5);
+            int jaugeSpecialPerdu = 2;
+            return new RapportAction(degats, 0, 0, jaugeSpecialPerdu, "perte d'energie",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueUltime(Combattant cible){
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
         if (this.jaugeSpecial >= 3 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 3.5));
-            cible.consomation(4);
-            cible.recevoirStun(cible.getStunMax());
             this.jaugeSpecial -= 3;
-            return (int) (this.attaqueDeBase * 3.5);
+            int degats = (int) (this.attaqueDeBase * 3.5);
+            int jaugeSpecialPerdu = 4;
+            int degatsStun = cible.getStunMax();
+            return new RapportAction(degats, degatsStun, 0, jaugeSpecialPerdu, "Aspiration d'energie",
+                    null, null);
         }
-        return 0;
+        return null;
     }
     @Override public int estimationDegatInflige(int niveauAtt){
         int estimation = switch (niveauAtt) {

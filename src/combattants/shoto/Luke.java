@@ -1,6 +1,8 @@
 package combattants.shoto;
 import combattants.Combattant;
 import combattants.Shoto;
+import moteur.RapportAction;
+
 //Passif Luke : Bonus d'attaque a chaque attaque réussit des la 1er attaque
     //Attaque de base : +2
     //Special 1 : +3
@@ -14,47 +16,52 @@ public class Luke extends Shoto {
 
 /* METHODES */
 
-    @Override public int lanceAttaqueDebase(Combattant cible){
+    @Override public RapportAction lanceAttaqueDebase(Combattant cible){
         if(this.jaugeSpecial < 3){
-            this.jaugeSpecial++;
+            this.recevoirJaugeSpecial(1);
         }
-        this.bonusAttaque += 2;
-        cible.recevoirDegats(this.attaqueDeBase + this.bonusAttaque);
-        return this.attaqueDeBase + this.bonusAttaque;
+        this.bonusAttaque += 2; //a voir pour mettre le mesage personaliser
+        int degats = this.attaqueDeBase + this.bonusAttaque;
+        return new RapportAction(degats, 0, 0, 0, "SAND BLAST",
+                null, null);
     }
-    @Override public int lanceChope(Combattant cible){
-        cible.recevoirDegats((int) (this.attaqueDeBase * 1.5));
-        return (int) ((this.attaqueDeBase + this.bonusAttaque) * 1.5);
+    @Override public RapportAction lanceChope(Combattant cible){
+        int degats = (int) (this.attaqueDeBase * 1.5) + this.bonusAttaque;
+        return new RapportAction(degats, 0, 0, 0, "Placage au Sol",
+                null, null);
     }
-    @Override public int lanceAttaqueSpecial1(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
         if (this.jaugeSpecial >= 1 ){
-            this.bonusAttaque += 3;
-            cible.recevoirDegats((this.attaqueDeBase + this.bonusAttaque) * 2 );
             this.jaugeSpecial --;
-            cible.recevoirStun(15);//Capacite Special1
-            return (this.attaqueDeBase + this.bonusAttaque) * 2 ;
+            this.bonusAttaque += 3;
+            int degats = (this.attaqueDeBase + this.bonusAttaque) * 2 ;
+            int degatsStun = 15;//Capacite Special1
+            return new RapportAction(degats, degatsStun, 0, 0, "Vulcan Blast",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueSpecial2(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
         if (this.jaugeSpecial >= 2 ){
             this.bonusAttaque += 4;
-            cible.recevoirDegats((this.attaqueDeBase + this.bonusAttaque) * 3);
             this.jaugeSpecial -= 2;
-            this.recevoirJaugeSpecial(1);//capacite Special 2
-            return (this.attaqueDeBase + this.bonusAttaque) * 3;
+            int degats = (this.attaqueDeBase + this.bonusAttaque) * 3;
+            this.recevoirJaugeSpecial(1); //capacite Special 2
+            return new RapportAction(degats, 0, 0, 0, "Eraser",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueUltime(Combattant cible){
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
         if (this.jaugeSpecial >= 3 ){
             this.bonusAttaque += 4;
-            cible.recevoirDegats((int) ((this.attaqueDeBase + this.bonusAttaque) * 4.5));
             this.jaugeSpecial -= 3;
             this.jaugeStun = 0; //capacite ultime
-            return (int) ((this.attaqueDeBase + this.bonusAttaque) * 4.5);
+            int degats = (int) ((this.attaqueDeBase + this.bonusAttaque) * 4.5);
+            return new RapportAction(degats, 0, 0, 0, "Pale Rider",
+                    null, null);
         }
-        return 0;
+        return null;
     }
     @Override public int estimationDegatInflige(int niveauAtt){
         int estimation;

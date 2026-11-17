@@ -1,4 +1,7 @@
 package combattants;
+
+import moteur.RapportAction;
+
 public class Assasin extends Combattant{
 /* CONSTRUCTEUR */
     public Assasin(String nom){
@@ -7,32 +10,34 @@ public class Assasin extends Combattant{
     }
 
 /* METHODES */
-    @Override public int lanceAttaqueSpecial1(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
         if (this.jaugeSpecial >= 1 ){
-            cible.recevoirDegats(this.attaqueDeBase * 2);
             this.jaugeSpecial --;
-            cible.recevoirStun(20);
-            return this.attaqueDeBase *2 ;
+            int degats = this.attaqueDeBase * 2;
+            int degatsStun = 20;
+            return new RapportAction(degats, degatsStun, 0, 0, "Coup en traite",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueSpecial2(Combattant cible){
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
         if (this.jaugeSpecial >= 2 ){
-            cible.recevoirDegats((int) (this.attaqueDeBase * 2.5));
-            cible.consomation(2);
             this.jaugeSpecial -= 2;
-            return (int) (this.attaqueDeBase * 2.5);
+            int degats = (int) (this.attaqueDeBase * 2.5);
+            int jaugeSpecialPerdu = 2;
+            return new RapportAction(degats, 0, 0, jaugeSpecialPerdu, "Vol special",
+                    null, null);
         }
-        return 0;
+        return null;
     }
-    @Override public int lanceAttaqueUltime(Combattant cible){
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
         if (this.jaugeSpecial >= 3 ){
-            int degatsTotaux = (int) ((this.attaqueDeBase * 3.5) + ((cible.getVieMax() - cible.getVie()) / 4));
-            cible.recevoirDegats(degatsTotaux);
             this.jaugeSpecial -= 3;
-            return degatsTotaux;
+            int degatsTotaux = (int) ((this.attaqueDeBase * 3.5) + ((cible.getVieMax() - cible.getVie()) / 4));
+            return new RapportAction(degatsTotaux, 0, 0, 0, "Aspiration d'ame",
+                    null, null);
         }
-        return 0;
+        return null;
     }
     @Override public int estimationDegatInflige(int niveauAtt){
         int estimation = switch (niveauAtt) {
@@ -48,6 +53,6 @@ public class Assasin extends Combattant{
         Assasin copie = new Assasin(this.nom);
         return copie;
     }
-    @Override public String getArchetype() { return "Assasin";}
+    @Override public String getArchetype() {return "Assasin";}
 }
 
