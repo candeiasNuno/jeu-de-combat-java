@@ -15,7 +15,6 @@ public class Luke extends Shoto {
     }
 
 /* METHODES */
-
     @Override public RapportAction lanceAttaqueDebase(Combattant cible){
         if(this.jaugeSpecial < 3){
             this.recevoirJaugeSpecial(1);
@@ -88,4 +87,32 @@ public class Luke extends Shoto {
         Luke luke = new Luke(this.vieMax, this.attaqueDeBase, this.vitesse, this.stunMax);
         return luke;
     }
+
+/* METHODE RESOUDRE */
+    @Override public RapportAction resoudreAttaqueVsGarde(int niveauAtt, Combattant cible){
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.getNom().toUpperCase();
+        RapportAction rapport = this.lanceAttaque(cible, niveauAtt);
+        String verdict;
+        String impact;
+        int degats;
+        int degatsStun;
+        if(niveauAtt == 4){
+            degats = (int) (rapport.getDegatsInfliges() * 0.70);
+            degatsStun = 0;
+            verdict = "> Verdict        : [ GARDE VS ULTIME DE LUKE ] Luke utilise sont Ultime mais " + nomCible + " se met en garde !!!";
+            impact = "> Impact      : Grace a sont Ultime Luke inflige " + degats + " degats meme si " + nomCible + " etait en garde.";
+            return new RapportAction(degats, degatsStun, 0, 0, null, verdict, impact, cible);
+        } else{
+            degats = 0;
+            degatsStun = this.estimationDegatInflige(niveauAtt);
+            verdict = "> Verdict        : [GARDE PARFAITE !] " + nomCible + " bloque parfaitement " + rapport.getNomAttaque() +
+                    " de " + nomAttaquant + " !";
+            impact = "> Impact         : " + nomCible + " gagne 1 de jauge Special et subit " + degatsStun +
+                    " de degats de stun.";
+            return new RapportAction(degats, degatsStun, 1, 0, null, verdict, impact, cible);
+        }
+
+    }
 }
+

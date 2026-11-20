@@ -1,5 +1,7 @@
 package moteur;
 
+import combattants.Combattant;
+
 public class RapportAction {
 /* VARIABLES */
     private int degatsInfliges;
@@ -9,10 +11,16 @@ public class RapportAction {
     private String nomAttaque;
     private String texteVerdict;
     private String texteImpact;
+    private Combattant combattantCible;
 
 /* CONSTRUCTEUR */
-    public RapportAction(int degatsInfliges, int degatsStun, int jaugeSpeGagne, int jaugeSpePerdue,String nomAttaque,
-                         String texteVerdict, String texteImpact){
+/* CONSTRUCTEUR */
+public RapportAction(int degatsInfliges, int degatsStun, int jaugeSpeGagne, int jaugeSpePerdue, String nomAttaque,
+                     String texteVerdict, String texteImpact) {
+    this(degatsInfliges, degatsStun, jaugeSpeGagne, jaugeSpePerdue, nomAttaque, texteVerdict, texteImpact, null);
+}
+public RapportAction(int degatsInfliges, int degatsStun, int jaugeSpeGagne, int jaugeSpePerdue, String nomAttaque, String texteVerdict,
+                     String texteImpact, Combattant combattantCible) {
         this.degatsInfliges = degatsInfliges;
         this.degatsStun = degatsStun;
         this.jaugeSpeGagne = jaugeSpeGagne;
@@ -20,6 +28,7 @@ public class RapportAction {
         this.nomAttaque = nomAttaque;
         this.texteVerdict = texteVerdict;
         this.texteImpact = texteImpact;
+        this.combattantCible = combattantCible;
     }
 
 /* GETTERS */
@@ -30,4 +39,5 @@ public class RapportAction {
     public int getJaugeSpeGagne(){ return jaugeSpeGagne; }
     public int getJaugeSpePerdue() { return jaugeSpePerdue; }
     public String getNomAttaque() { return nomAttaque; }
+    public Combattant getCombattantCible() { return combattantCible; }
 }

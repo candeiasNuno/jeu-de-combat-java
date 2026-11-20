@@ -1,0 +1,1863 @@
+==> src/ui/Affichage.java <==
+package ui;
+public class Affichage {
+    public static final int LARGEUR = 70;
+    private static final int LARGEUR_TEXTE = LARGEUR - 4;
+
+/* AFFICHAGE CLASSIQUE */
+    public static void haut(){
+        System.out.println("╔" + "═".repeat(LARGEUR - 2) + "╗");
+    }
+    public static void ligneSimple(){
+        System.out.println("─".repeat(LARGEUR));
+    }
+    public static void bas(){
+        System.out.println("╚" + "═".repeat(LARGEUR - 2) + "╝");
+    }
+    public static void separateur(){
+        System.out.println("╠" + "═".repeat(LARGEUR - 2) + "╣");
+    }
+    public static void separateurDeuxColonnes() {
+        System.out.println("╠" + "═".repeat(33) + "╦" + "═".repeat(34) + "╣");
+    }
+    public static void separateurDeuxColonnesVersHaut() {
+        System.out.println("╠" + "═".repeat(33) + "╩" + "═".repeat(34) + "╣");
+    }
+    public static void ligneVide(){
+        System.out.println("╠" + " ".repeat(LARGEUR - 2) + "╣");
+    }
+    public static void saut(){
+        System.out.println("║" + " ".repeat(LARGEUR - 2) + "║");
+    }
+    public static void clear(){
+        System.out.print("\033[H\033[2J"); // Commande pour nettoyer le terminal
+        System.out.flush();
+    }
+
+    public static void separateurMenuHaut() {
+        System.out.println("╠" + "═".repeat(33) + "╦" + "═".repeat(34) + "╣");
+    }
+    public static void separateurMenuMilieu() {
+        System.out.println("╠" + "═".repeat(33) + "╬" + "═".repeat(34) + "╣");
+    }
+    public static void basMenu() {
+        System.out.println("╚" + "═".repeat(33) + "╩" + "═".repeat(34) + "╝");
+    }
+
+/* AFFICHAGE AVEC TEXTE */
+    public static void ligne(String texte) {
+        System.out.printf("║ %-" + LARGEUR_TEXTE + "s ║%n", tronquer(texte, LARGEUR_TEXTE));
+    }
+    public static void ligneSpecial(String texte1, String texte2, String texte3) {
+        // 66 caractères disponibles : 3 colonnes de 20 caractères + 2 écarts de 3 espaces (20 + 3 + 20 + 3 + 20 = 66)
+        int largeurCol = (LARGEUR_TEXTE - 6) / 3; // Donne exactement 20
+
+        System.out.printf("║ %-" + largeurCol + "s   %-" + largeurCol + "s   %-" + largeurCol + "s ║%n",
+                tronquer(texte1, largeurCol),
+                tronquer(texte2, largeurCol),
+                tronquer(texte3, largeurCol));
+    }
+    public static void ligneCentree(String texte) {
+        String texteSecurise = tronquer(texte, LARGEUR_TEXTE);
+        int espacesGauche = (LARGEUR_TEXTE - texteSecurise.length()) / 2;
+        int espacesDroite = LARGEUR_TEXTE - texteSecurise.length() - espacesGauche;
+
+        System.out.println("║ " + " ".repeat(Math.max(0, espacesGauche))
+                + texteSecurise
+                + " ".repeat(Math.max(0, espacesDroite)) + " ║");
+    }
+    public static void deuxColonnes(String gauche, String droite) {
+        System.out.printf("║ %-31s ║ %-32s ║%n", tronquer(gauche, 31), tronquer(droite, 32));
+    }
+    public static void ligneVideMenu() {
+        // 1 bordure + 33 espaces + 1 bordure + 34 espaces + 1 bordure = 70 caractères
+        System.out.println("║" + " ".repeat(33) + "║" + " ".repeat(34) + "║");
+    }
+
+/* BARRE VISUELLES DYNAMIQUES */
+    public static String genererBarre(int valeurActuelle, int valeurMax) {
+        if (valeurMax <= 0) return "[░░░░░░░░░░]";
+
+        int blocsPleins = Math.max(0, Math.min(10, (int) Math.round(((double) valeurActuelle / valeurMax) * 10)));
+        int blocsVides = 10 - blocsPleins;
+
+        return "[" + "█".repeat(blocsPleins) + "░".repeat(blocsVides) + "]";
+    }
+    public static String genererJaugeSpeciale(int jaugeActuelle) {
+        int jaugeSecurisee = Math.max(0, Math.min(3, jaugeActuelle));
+        return "[" + "■".repeat(jaugeSecurisee) + "□".repeat(3 - jaugeSecurisee) + " ]";
+    }
+
+/* AFFICHAGE ROSTER */
+    public static void separateurSeptColonnesHaut() {
+        System.out.println("╠" + "═".repeat(5) + "╦" + "═".repeat(13) + "╦" + "═".repeat(11)
+                + "╦" + "═".repeat(8) + "╦" + "═".repeat(8) + "╦" + "═".repeat(9)
+                + "╦" + "═".repeat(8) + "╣");
+    }
+    public static void separateurSeptColonnesMilieu() {
+        System.out.println("╠" + "═".repeat(5) + "╬" + "═".repeat(13) + "╬" + "═".repeat(11)
+                + "╬" + "═".repeat(8) + "╬" + "═".repeat(8) + "╬" + "═".repeat(9)
+                + "╬" + "═".repeat(8) + "╣");
+    }
+    public static void basSeptColonnes() {
+        System.out.println("╚" + "═".repeat(5) + "╩" + "═".repeat(13) + "╩" + "═".repeat(11)
+                + "╩" + "═".repeat(8) + "╩" + "═".repeat(8) + "╩" + "═".repeat(9)
+                + "╩" + "═".repeat(8) + "╝");
+    }
+    public static void septColonnes(String c1, String c2, String c3, String c4, String c5, String c6, String c7) {
+        System.out.printf("║ %-3s ║ %-11s ║ %-9s ║ %-6s ║ %-6s ║ %-7s ║ %-6s ║%n",
+                tronquer(c1, 3),
+                tronquer(c2, 11),
+                tronquer(c3, 9),
+                tronquer(c4, 6),
+                tronquer(c5, 6),
+                tronquer(c6, 7),
+                tronquer(c7, 6));
+    }
+
+/* AFFICHAGE VICTOIRE */
+    public static void banniereEncadree(String texte) {
+        // Largeur totale du cadre intérieur (sur les 66 cases disponibles de LARGEUR_TEXTE)
+        int largeurCadre = 52;
+        int largeurInterieure = largeurCadre - 2; // 50 caractères entre les barres │...│
+        String texteSecurise = tronquer(texte, largeurInterieure - 4);
+        // Centrage du texte à l'intérieur du petit cadre
+        int espGauche = (largeurInterieure - texteSecurise.length()) / 2;
+        int espDroite = largeurInterieure - texteSecurise.length() - espGauche;
+        // Assemblage des 5 lignes du cadre
+        String bordureHaut = "┌" + "─".repeat(largeurInterieure) + "┐";
+        String ligneVide   = "│" + " ".repeat(largeurInterieure) + "│";
+        String ligneTexte  = "│" + " ".repeat(espGauche) + texteSecurise + " ".repeat(espDroite) + "│";
+        String bordureBas  = "└" + "─".repeat(largeurInterieure) + "┘";
+        // Affichage centré dans le grand cadre de 70 caractères
+        ligneCentree(bordureHaut);
+        ligneCentree(ligneVide);
+        ligneCentree(ligneTexte);
+        ligneCentree(ligneVide);
+        ligneCentree(bordureBas);
+    }
+
+/* SECURITE ANTI-DÉBORDEMENTS */
+    private static String tronquer(String texte, int max) {
+        if (texte == null) return "";
+        if (texte.length() > max) {
+            return texte.substring(0, max - 3) + "...";
+        }
+        return texte;
+    }
+}
+
+==> src/enums/TypeAction.java <==
+package enums;
+
+public enum TypeAction {
+    ATTAQUE,
+    GARDE,
+    CHOPE,
+    STUN
+}
+
+==> src/ia/IA.java <==
+package ia;
+import combattants.Combattant;
+import combattants.Action;
+import enums.TypeAction;
+
+import java.util.List;
+import java.util.Random;
+
+public class IA {
+/* METHODES */
+    public static Action choisirActionIa(Combattant ia){
+        Action act = null;
+        if(ia.isEstEtourdi()){
+            act = new Action(TypeAction.STUN, 0);
+        } else{
+            Random generateur = new Random();
+            int aleatoire = generateur.nextInt(100) + 1; // Genre un chiffre entre 1 - 100
+            act = choixActionAleatoire(aleatoire, ia.getJaugeSpecial());
+            return act;
+        }
+        return act;
+    }
+    public static Action choixActionAleatoire(int proba, int jauge){
+        Action act = null;
+        switch (jauge) {
+            case 0:
+                if(proba <= 50){
+                    act = new Action(TypeAction.GARDE, 1); // 50% garde
+                } else if(proba <= 80){
+                    act = new Action(TypeAction.ATTAQUE, 1); // 30% attaque 1
+                } else{
+                    act = new Action(TypeAction.CHOPE, 1); // 20% chope
+                }
+                break;
+            case 1:
+                if(proba <= 30){
+                    act = new Action(TypeAction.ATTAQUE, 2); // 30% attaque 2
+                } else if(proba <= 60){
+                    act = new Action(TypeAction.ATTAQUE, 1); // 30% attaque 1
+                } else if(proba <= 80){
+                    act = new Action(TypeAction.GARDE, 1); // 20% garde
+                } else{
+                    act = new Action(TypeAction.CHOPE, 1); // 20% chope
+                }
+                break;
+            case 2:
+                if(proba <= 30){
+                    act = new Action(TypeAction.ATTAQUE, 3); // 30% attaque 3
+                } else if(proba <= 50){
+                    act = new Action(TypeAction.ATTAQUE, 2); // 20% attaque 2
+                } else if(proba <= 70){
+                    act = new Action(TypeAction.ATTAQUE, 1); // 20% attaque 1
+                } else if(proba <= 90){
+                    act = new Action(TypeAction.GARDE, 1); // 20% garde
+                } else{
+                    act = new Action(TypeAction.CHOPE, 1); // 10% chope
+                }
+                break;
+            case 3:
+                if(proba <= 50){
+                    act = new Action(TypeAction.ATTAQUE, 4); // 50% attaque 4
+                } else if(proba <= 60){
+                    act = new Action(TypeAction.ATTAQUE, 3); // 10% attaque 3
+                } else if(proba <= 70){
+                    act = new Action(TypeAction.ATTAQUE, 2); // 10% attaque 2
+                } else if(proba <= 80){
+                    act = new Action(TypeAction.ATTAQUE, 1); // 10% attaque 1
+                } else if(proba <= 90){
+                    act = new Action(TypeAction.CHOPE, 1); // 10% chope
+                } else{
+                    act = new Action(TypeAction.GARDE, 1); // 10% garde
+                }
+                break;
+            default:
+                break;
+        }
+        return act;
+    }
+    public static Combattant choixCombattantAleatoire(List<Combattant> roster){
+        Random generateur = new Random();
+        int idAleatoire = generateur.nextInt(roster.size());
+        Combattant c = roster.get(idAleatoire).copieCombattant();
+        return c;
+    }
+
+}
+
+==> src/donnees/Sauvegarde.java <==
+package donnees;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.IOException;
+import combattants.Combattant;
+import combattants.Shoto;
+import combattants.Assasin;
+import combattants.Grappler;
+import combattants.shoto.Luke;
+import moteur.Roster;
+import combattants.Zoner;
+
+public class Sauvegarde {
+/* METHODES */
+    public void sauvegardeRoster(Roster roster){
+        Path chemin = Paths.get("sauvegarde_roster.csv");
+        List<String> lignesAEcrire = new ArrayList<>();
+
+        // Transformation des objets en format texte (CSV)
+        for (Combattant c : roster.getRoster()){
+            String ligne = c.getClass().getSimpleName() + ";" + c.getNom() + ";" + c.getVie() + ";" + c.getAttaqueDeBase() + ";"
+                    + c.getVitesse() + ";" + c.getStunMax() + ";" + c.getJaugeSpecial() + ";" + c.getEstVivant();
+            lignesAEcrire.add(ligne);
+        }
+
+        try {
+            // Écrase l'ancien fichier (TRUNCATE) ou le crée (CREATE)
+            Files.write(chemin, lignesAEcrire, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            System.out.println("Roster sauvegardé avec succès !");
+        } catch (IOException e){
+            System.out.println("Erreur grave lors de la sauvegarde du roster : " + e.getMessage());
+        }
+    }
+    public Roster chargerRoster(){
+        Roster ros = new Roster();
+        Path chemin = Paths.get("sauvegarde_roster.csv");
+
+        try {
+            List<String> lignesLues = Files.readAllLines(chemin);
+
+            for(String ligne : lignesLues){
+                // Découpage des statistiques séparées par des points-virgules
+                String[] morceaux = ligne.split(";");
+
+                String typeCombattant = morceaux[0];
+                String nomCombattant = morceaux[1];
+                String vieCombattant = morceaux[2];
+                String attaqueDeBaseCombattant = morceaux[3];
+                String vitesseCombattant = morceaux[4];
+                String stunMax = morceaux[5];
+                String jaugeSpecial = morceaux[6];
+                String vivant = morceaux[7];
+
+                Combattant combattant = null;
+
+                // Instanciation dynamique selon la classe lue dans le fichier
+                switch (typeCombattant){
+                    case "Shoto":
+                        combattant = new Shoto(nomCombattant);
+                        break;
+                    case "Assasin":
+                        combattant = new Assasin(nomCombattant);
+                        break;
+                    case "Grappler":
+                        combattant = new Grappler(nomCombattant);
+                        break;
+                    case "Zoner":
+                        combattant = new Zoner(nomCombattant);
+                        break;
+                    case "Luke":
+                        combattant = new Luke(Integer.parseInt(vieCombattant), Integer.parseInt(attaqueDeBaseCombattant), Integer.parseInt(vitesseCombattant),
+                                Integer.parseInt(stunMax));
+                        break;
+                    default:
+                        System.out.println("Classe inconnue : " + typeCombattant);
+                        break;
+                }
+
+                if (combattant != null) {
+                    ros.ajouterCombattant(combattant);
+                }
+            }
+            System.out.println("Chargement réussi !");
+
+        } catch (IOException e){
+            System.out.println("Erreur de lecture : " + e.getMessage());
+        }
+
+        return ros;
+    }
+}
+==> src/moteur/Roster.java <==
+package moteur;
+import java.util.List;
+import  java.util.ArrayList;
+import combattants.Combattant;
+
+public class Roster {
+/* VARIABLES */
+    private List<Combattant> roster;
+
+/* CONSTRUCTEUR */
+    public Roster(){
+        this.roster = new ArrayList<>();
+    }
+
+/* METHODES */
+    public void ajouterCombattant(Combattant combattant){
+        this.roster.add(combattant);
+        System.out.println(combattant.getNom()+ " a été ajouté au Roster aux Roster de Personnage !");
+    }
+
+    public void afficherRoster(){
+        System.out.println("--- ROSTER ---");
+        this.roster.forEach(c -> System.out.println(" - " + c.getNom()));
+    }
+
+    public List<Combattant> getRoster(){ return roster; }
+}
+
+==> src/moteur/AreneIa.java <==
+package moteur;
+import combattants.Action;
+import combattants.Combattant;
+import ia.IA;
+
+import java.util.Scanner;
+
+public class AreneIa extends Arene{
+/* CONSTRUCTEUR */
+    public AreneIa(Combattant c1, Combattant c2){
+        super(c1, c2);
+    }
+
+/* METHODES */
+    @Override public void lancerCombatV2(){
+        int round = 0;
+        String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
+        while(c1.getEstVivant() && c2.getEstVivant()){
+            round++;
+            Action actJ1 = null;
+            Action actJ2 = null;
+            actJ1 = this.selectionnerAction(c1, round, actionRoundPrecedent);
+            this.pause(1000);
+            actJ2 = IA.choisirActionIa(c2);
+            c1.desactiveStun();//methode de flemmard mais simple
+            c2.desactiveStun();//methode de flemmard mais simple
+            actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
+        }
+        Scanner scanner = new Scanner(System.in);
+        if(c1.getEstVivant()){
+            this.afficheVictoire2(c1, c2, round, actionRoundPrecedent);
+            System.out.print("> Appuyez sur [Entrée] pour retourner au Menu Principal...  ");
+            scanner.nextLine();
+        } else{
+            this.afficheVictoire2(c2, c1, round, actionRoundPrecedent);
+            System.out.print("> Appuyez sur [Entrée] pour retourner au Menu Principal...  ");
+            scanner.nextLine();
+        }
+    }
+
+}
+
+==> src/moteur/MenuPrincipal.java <==
+package moteur;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import combattants.Combattant;
+import donnees.Sauvegarde;
+import ia.IA;
+import ui.Affichage;
+
+public class MenuPrincipal {
+/* VARIABLES */
+    private Roster roster;
+    private Sauvegarde sauvegarde;
+    private boolean jeuEnCours;
+
+/* CONSTRUCTEUR */
+    public MenuPrincipal(){
+        this.sauvegarde = new Sauvegarde();
+        if(Files.exists(Paths.get("sauvegarde_roster.csv"))){
+            this.roster = sauvegarde.chargerRoster();
+        }else{
+            System.out.println("ERREUR CRITIQUE : Le fichier sauvegarde_roster.csv est introuvable !");
+            System.out.println("Fermeture d'urgence du jeu.");
+            System.exit(1);
+        }
+        this.jeuEnCours = true;
+    }
+/* METHODES MULTIPLES */
+    public void pause(int millisecondes) {
+    try {
+        Thread.sleep(millisecondes);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+ /* METHODES V2*/
+    public void affichageHubV2(){
+        String texte;
+        Affichage.clear();
+        Affichage.haut();
+        Affichage.saut();
+        texte = "T O U R N O I  M A R T I A L";
+        Affichage.ligneCentree(texte);
+        texte = "-- Édition Terminal --";
+        Affichage.ligneCentree(texte);
+        Affichage.saut();
+        Affichage.separateur();
+        Affichage.saut();
+        texte = "Menu Principal :";
+        Affichage.ligne(texte);
+        Affichage.saut();
+        texte = "[ 1 ] Lancer un Combat (Versus)";
+        Affichage.ligne(texte);
+        texte = "[ 2 ] Lancer un Combat contre IA (Versus)";
+        Affichage.ligne(texte);
+        texte = "[ 3 ] Afficher les Combattants (Roster)";
+        Affichage.ligne(texte);
+        texte = "[ 4 ] Afficher les Regles du Combat";
+        Affichage.ligne(texte);
+        texte = "[ 5 ] Quitter le jeu";
+        Affichage.ligne(texte);
+        Affichage.saut();
+        Affichage.bas();
+    }
+    public void affichageHubV3(){
+        String texte;
+        String texte2;
+
+        Affichage.clear();
+        Affichage.haut();
+        texte = "===  T O U R N O I  M A R T I A L  ===";
+        Affichage.ligneCentree(texte);
+        texte = "-- Edition Terminal V2 --";
+        Affichage.ligneCentree(texte);
+        Affichage.separateurMenuHaut();
+        texte = "> MODES D'AFFRONTEMENT (VERSUS)";
+        texte2 = "[ 1 ] Duel Local (J1 vs J2)";
+        Affichage.deuxColonnes(texte, texte2);
+        texte = "";
+        texte2 = "[ 2 ] Duel IA (J1 vs IA)";
+        Affichage.deuxColonnes(texte, texte2);
+        Affichage.separateurMenuMilieu();
+        texte = "> MODE HISTOIRE";
+        texte2 = "[ 3 ] Lancer le Mode Histoire";
+        Affichage.deuxColonnes(texte, texte2);
+        texte = "";
+        texte2 = "          (Bientôt disponibles)";
+        Affichage.deuxColonnes(texte, texte2);
+        Affichage.separateurMenuMilieu();
+        texte = "> ARCHIVES ET CONFIGURATION";
+        texte2 = "[ 4 ] Affichage du Roster";
+        Affichage.deuxColonnes(texte, texte2);
+        texte = "";
+        texte2 = "[ 5 ] Regles & Triangle Tactique";
+        Affichage.deuxColonnes(texte, texte2);
+        texte2 = "[ 6 ] Quitter le programme";
+        Affichage.deuxColonnes(texte, texte2);
+        Affichage.basMenu();
+
+
+
+    }
+    public void affichageRosterV2(){
+        String texte;
+        Affichage.clear();
+        Affichage.haut();
+        texte = "=== ROSTER DES COMBATTANTS ===";
+        Affichage.ligneCentree(texte);
+        Affichage.separateurSeptColonnesHaut();
+        Affichage.septColonnes("ID", "NOM", "CLASSE", "♥ PV", "▲ ATK", "» VIT", "★ STUN");
+        for(int i = 0; i < this.roster.getRoster().size(); i++){
+            Affichage.separateurSeptColonnesMilieu();
+            Combattant c = this.roster.getRoster().get(i);
+            Affichage.septColonnes(
+                    "[" + i + "]",
+                    c.getNom().toUpperCase(),
+                    c.getArchetype(),
+                    String.valueOf(c.getVieMax()),
+                    String.valueOf(c.getAttaqueDeBase()),
+                    String.valueOf(c.getVitesse()),
+                    String.valueOf(c.getStunMax())
+            );
+        }
+        Affichage.basSeptColonnes();
+    }
+    public Combattant choixCombattant(int numeroJ){
+        Scanner sc = new Scanner(System.in);
+        int repJ;
+        Combattant c1 = null;
+        this.affichageRosterV2();
+        boolean selectionJ = false;
+        while(!selectionJ){
+            System.out.printf(" > J%d sélectionne un combattant ( tapez son ID ) : ", numeroJ);
+            if(sc.hasNextInt()){
+                repJ = sc.nextInt();
+                if(repJ >= 0 && repJ < this.roster.getRoster().size()){
+                    c1 = this.roster.getRoster().get(repJ).copieCombattant();
+                    selectionJ = true;
+                } else{
+                    System.out.println(" > Veillez sélectionne un combattant présent dans le roster !");
+                }
+            } else{
+                System.out.println(" > Veillez sélectionne un combattant présent dans le roster !");
+                sc.next();
+            }
+        }
+        return c1;
+    }
+    public void choixMenuPrincipalV2(int x){
+        Scanner sc = new Scanner(System.in);
+        int rep = 0;
+        switch (x){
+            case 1:
+                Combattant c1 = this.choixCombattant(1);
+                Combattant c2 = this.choixCombattant(2);
+                Affichage.clear();
+                this.pause(2000);
+                Arene combat1 = new Arene(c1, c2);
+                combat1.lancerCombatV2();
+                break;
+            case 2:
+                Combattant j1 = this.choixCombattant(1);
+                Combattant jIa = IA.choixCombattantAleatoire(this.roster.getRoster());
+                Affichage.clear();
+                this.pause(2000);
+                AreneIa combat = new AreneIa(j1, jIa);
+                combat.lancerCombatV2();
+                break;
+            case 3:
+                break;
+            case 4:
+                boolean dansRoster = true;
+                while(dansRoster){
+                    this.affichageRosterV2();
+                    System.out.print(" > Appuyez sur [ -1 ] pour retourne au menu principal ! : ");
+                    if(sc.hasNextInt()){
+                        rep = sc.nextInt();
+                        if( rep == -1){
+                            dansRoster = false;
+                        } else{
+                            System.out.println(" > Choix invalide.");
+                            this.pause(1000);
+                        }
+                    } else{
+                        System.out.println(" > Saisie invalide ! Veuillez entrer un chiffre.");
+                        sc.next();
+                        this.pause(1000);
+                    }
+                }
+                break;
+            case 5:
+                boolean dansRegles = true;
+                while(dansRegles){
+                    this.affichageRegles();
+                    System.out.print(" > Appuyez sur [ -1 ] pour retourne au menu principal ! : ");
+                    if(sc.hasNextInt()){
+                        rep = sc.nextInt();
+                        if( rep == -1){
+                            dansRegles = false;
+                        } else{
+                            System.out.println(" > Choix invalide.");
+                            this.pause(1000);
+                        }
+                    } else{
+                        System.out.println(" > Saisie invalide ! Veuillez entrer un chiffre.");
+                        sc.next();
+                        this.pause(1000);
+                    }
+
+                }
+                break;
+            case 6:
+                this.jeuEnCours = false;
+                System.out.println(" > MERCI D\'AVOIR JOUE A NOTRE JEU!");
+                break;
+            default:
+                System.out.println(" > Selectionne un choix disponible parmi les options !");
+                this.pause(2000);
+                break;
+        }
+    }
+    public void affichageRegles(){
+        Affichage.clear();
+        Affichage.haut();
+        String texte = "REGLES DU COMBAT V2";
+        Affichage.ligneCentree(texte);
+        Affichage.separateur();
+        texte = "1. LE TRIANGLE TACTIQUE (Resolution simultanee)";
+        Affichage.ligne(texte);
+        texte = "   • ATTAQUE bat CHOPE   : Interrompt la prise (Counter Hit)";
+        Affichage.ligne(texte);
+        texte = "   • CHOPE   bat GARDE   : Traverse la défense (Brise-Garde)";
+        Affichage.ligne(texte);
+        texte = "   • GARDE   bat ATTAQUE : 0 dégât PV, +1 Jauge Sp mais +Stun";
+        Affichage.ligne(texte);
+        Affichage.saut();
+        texte = "2. PRIORITÉS D'ATTAQUE & ÉTOURDISSEMENT (STUN)";
+        Affichage.ligne(texte);
+        texte = "   • Niveau supérieur écrase niveau inférieur (Ultime > Sp2 > ...)";
+        Affichage.ligne(texte);
+        texte = "   • À niveau égal, la plus haute VITESSE l'emporte";
+        Affichage.ligne(texte);
+        texte = "   • Si la jauge de Stun est pleine : ÉTOURDI au tour suivant !";
+        Affichage.ligne(texte);
+        Affichage.separateur();
+        texte = "3. SPÉCIFICITÉS DES CLASSES";
+        Affichage.ligne(texte);
+        texte = "   • SHOTO    : +50% Stun sur Garde | Sp1 +Stun | Sp2 +1SP | Ult 0";
+        Affichage.ligne(texte);
+        texte = "   • ASSASSIN : Très rapide | Sp1 +Stun | Sp2 -1SP | Ult Exécution";
+        Affichage.ligne(texte);
+        texte = "   • GRAPPLER : Chope boostée (+1SP/+Stun) | Sp1 +Stun | Sp2 Soin";
+        Affichage.ligne(texte);
+        texte = "   • ZONER    : Degats Stun boost | SP2 -2sp | SP3 -3SP et STUN";
+        Affichage.ligne(texte);
+        Affichage.bas();
+
+
+    }
+    public void lancerV2(){
+        Scanner sc = new Scanner(System.in);
+        int repMenuPrincipal;
+        while(this.jeuEnCours){
+            this.affichageHubV3();
+            System.out.print(" > Que voulez-vous faire ? : ");
+            if(sc.hasNextInt()){
+                repMenuPrincipal = sc.nextInt();
+                this.choixMenuPrincipalV2(repMenuPrincipal);
+            }else{
+                System.out.println(" > Selectionne un choix disponible parmi les options ! ");
+                sc.next();
+                this.pause(2000);
+            }
+        }
+    }
+
+
+}
+
+==> src/moteur/Arene.java <==
+package moteur;
+import java.util.Scanner;
+import combattants.Combattant;
+import combattants.Action;
+import ui.Affichage;
+import enums.TypeAction;
+
+
+public class Arene {
+/* VARIABLES */
+    protected Combattant c1;
+    protected Combattant c2;
+
+/* CONSTRUCTEUR */
+    public Arene(Combattant c1, Combattant c2){
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+/* METHODES */
+    /* METHODE MULTIPLES */
+    public void pause(int millisecondes) {
+    try {
+        Thread.sleep(millisecondes);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+    public int lireSaisieCachee(String message) {
+        java.io.Console console = System.console();
+        int choix = -1;
+        // Mode Terminal (Saisie masquée)
+        if (console != null) {
+            char[] saisie = console.readPassword("%s", message);
+            try {
+                choix = Integer.parseInt(new String(saisie));
+            } catch (NumberFormatException e) {
+                // Reste à -1 si la conversion échoue
+            }
+        }
+        // Mode IDE / Secours (Saisie visible)
+        else {
+            System.out.print(message);
+            java.util.Scanner sc = new java.util.Scanner(System.in);
+            if (sc.hasNextInt()) {
+                choix = sc.nextInt();
+            } else {
+                sc.next(); // Vide le scanner
+            }
+        }
+        return choix;
+    }
+    /* METHODES V2 */
+    public void affichageEtatCombatV2(int nbRound){
+        Affichage.clear();
+        Affichage.haut();
+        String etatC1;
+        String etatC2;
+        Affichage.ligneCentree("ROUND " + nbRound + " - ARENE PVP");
+        Affichage.separateurDeuxColonnes();
+        String J1 = "JOUEUR 1 : " + c1.getNom().toUpperCase() + " (" + c1.getClass().getSimpleName().toUpperCase() + ")";
+        String J2 = "JOUEUR 2 : " + c2.getNom().toUpperCase() + " (" + c2.getClass().getSimpleName().toUpperCase() + ")";
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "État     : " + c1.etatsCombattant();
+        J2 = "État     : " + c2.etatsCombattant();
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "PV       : " + Affichage.genererBarre(c1.getVie(), c1.getVieMax()) + " " + c1.getVie() + "/" + c1.getVieMax();
+        J2 = "PV       : " + Affichage.genererBarre(c2.getVie(), c2.getVieMax()) + " " + c2.getVie() + "/" + c2.getVieMax();
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c1.getJaugeSpecial()) + " (" + c1.getJaugeSpecial() + "/" + 3 + ")";
+        J2 = "Jauge Sp : " + Affichage.genererJaugeSpeciale(c2.getJaugeSpecial()) + " (" + c2.getJaugeSpecial() + "/" + 3 + ")";
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "Stun     : " + Affichage.genererBarre(c1.getJaugeStun(), c1.getStunMax()) + " " + c1.getJaugeStun() + "/" + c1.getStunMax();
+        J2 = "Stun     : " + Affichage.genererBarre(c2.getJaugeStun(), c2.getStunMax()) + " " + c2.getJaugeStun() + "/" + c2.getStunMax();
+        Affichage.deuxColonnes(J1, J2);
+        J1 = "VIT : " + c1.getVitesse() + "         ATK : " +   c1.getAttaqueDeBase();
+        J2 = "VIT : " + c2.getVitesse() + "         ATK : " +   c2.getAttaqueDeBase();
+        Affichage.deuxColonnes(J1, J2);
+        Affichage.separateurDeuxColonnesVersHaut();
+    }
+    public void affichageActionDispo(Combattant c){
+        Affichage.ligne("ACTIONS DISPONIBLES (" + c.getNom().toUpperCase() + ") :");
+        Affichage.ligneSpecial("[1] Attaque Base (0)", "[2] Garde (0)", "[3] Chope (0)");
+        switch (c.getJaugeSpecial()){
+            case 0:
+                Affichage.ligneSpecial("[-] Spéciale1 (Bloq)", "[-] Spéciale2 (Bloq)", "[-] Ultime (Bloq)");
+                break;
+            case 1:
+                Affichage.ligneSpecial("[4] Spéciale1 (1)", "[-] Spéciale2 (Bloq)", "[-] Ultime (Bloq)");
+                break;
+            case 2:
+                Affichage.ligneSpecial("[4] Spéciale1 (1)", "[5] Spéciale2 (2)", "[-] Ultime (Bloq)");
+                break;
+            case 3:
+                Affichage.ligneSpecial("[4] Spéciale1 (1)", "[5] Spéciale2 (2)", "[6] Ultime (3)");
+                break;
+            default:
+                System.out.println("ERREUR JAUGE SPECIAL");
+        }
+        Affichage.bas();
+    }
+    public void afficheVictoire2(Combattant winner, Combattant loser, int nbRound, String resumeDernierRound){
+        Affichage.clear();
+        Affichage.haut();
+        String texte = "=== ★ VICTOIRE DE " + winner.getNom().toUpperCase() + " ★ ===";
+        Affichage.banniereEncadree(texte);
+        Affichage.separateur();
+        texte = "BILAN DE L\'AFFRONTEMENT :";
+        Affichage.ligne(texte);
+        texte = "  • Adversaire vaincu : " + loser.getNom().toUpperCase() + " (" + loser.getClass().getSimpleName() + ")";
+        Affichage.ligne(texte);
+        texte = "  • Duree du duel     : " + nbRound + " Rounds";
+        Affichage.ligne(texte);
+        texte = "  • Vie restante      : " + Affichage.genererBarre(winner.getVie(), winner.getVieMax()) + " " +
+                winner.getVie() + "/" + winner.getVieMax() + " PV";
+        Affichage.ligne(texte);
+        texte = "  • Jauge Sp finale   : " + Affichage.genererJaugeSpeciale(winner.getJaugeSpecial()) + " (" +
+                winner.getJaugeSpecial() + "/3)";
+        Affichage.ligne(texte);
+        Affichage.separateur();
+        texte = "RANG DU MATCH : ";
+        if(winner.getVie() >= ( winner.getVieMax() * 0.90)){
+            texte += "[ S - VICTOIRE PARFAITE ]";
+        } else if(winner.getVie() >= ( winner.getVieMax() * 0.50)){
+            texte += "[ A - VICTOIRE NORMAL ]";
+        } else if(winner.getVie() >= ( winner.getVieMax() * 0.10)){
+            texte += "[ C - VICTOIRE DANS LE DUR ]";
+        } else{
+            texte += "[ D - VICTOIRE IN EXTREMISTE ]";
+        }
+        Affichage.ligneCentree(texte);
+        Affichage.bas();
+        System.out.println("> Dernier echange effectue : ");
+        System.out.println(resumeDernierRound);
+        Affichage.ligneSimple();
+
+    }
+    public Action creerAction(int choix){
+        Action action = null;
+        switch (choix){
+            case 1:
+                action = new Action(TypeAction.ATTAQUE, 1);
+                break;
+            case 2:
+                action = new Action(TypeAction.GARDE, 1);
+                break;
+            case 3:
+                action = new Action(TypeAction.CHOPE, 1);
+                break;
+            case 4:
+                action = new Action(TypeAction.ATTAQUE, 2);
+                break;
+            case 5:
+                action = new Action(TypeAction.ATTAQUE, 3);
+                break;
+            case 6:
+                action = new Action(TypeAction.ATTAQUE, 4);
+                break;
+            default:
+                System.out.println("Erreur creation d action");
+                break;
+        }
+        return action;
+    }
+    public Action selectionnerAction(Combattant c, int nbRound, String texteTourPrecedant){
+        this.affichageEtatCombatV2(nbRound);
+        this.affichageActionDispo(c);
+        int maxDispo;
+        int rep;
+        boolean choixFait = false;
+        Action action = null;
+
+        switch (c.getJaugeSpecial()){
+            case 0:
+                maxDispo = 3;
+                break;
+            case 1:
+                maxDispo = 4;
+                break;
+            case 2:
+                maxDispo = 5;
+                break;
+            case 3:
+                maxDispo = 6;
+                break;
+            default:
+                maxDispo = -1;
+                break;
+        }
+        System.out.println(texteTourPrecedant);
+        Affichage.ligneSimple();
+        while(!choixFait){
+            if(c.isEstEtourdi()){
+                System.out.println("> " + c.getNom().toUpperCase() + ", est etourdi ! ");
+                this.pause(2000);
+                action = new Action(TypeAction.STUN, 0);
+                break;
+            }
+            String prompt = "> " + c.getNom().toUpperCase() + ", choisissez votre action (1-" + maxDispo + ") : ";
+            rep = this.lireSaisieCachee(prompt);
+            if(rep >= 1 && rep <= maxDispo){
+                action = creerAction(rep);
+                choixFait = true;
+            } else{
+                System.out.println("> Selectionne une action disponible !");
+            }
+        }
+        return action;
+
+    }
+    public String resoudreCroisement(Action act1, Combattant j1, Action act2, Combattant j2){
+        TypeAction actionJ1 = act1.getNomAction();
+        int niveauActJ1 = act1.getNiveauAction();
+        TypeAction actionJ2 = act2.getNomAction();
+        int niveauActJ2 = act2.getNiveauAction();
+        int degatStun;
+        int degats;
+        String message = "> Duel precedent : " + j1.getNom().toUpperCase() + " [" + actionJ1 + "][" + niveauActJ1 + "] ◄── VS ──► " +
+                j2.getNom().toUpperCase() + " [" + actionJ2 + "][" + niveauActJ2 + "] \n";
+
+        if(actionJ1 == TypeAction.ATTAQUE){
+            if(actionJ2 == TypeAction.CHOPE){
+                degats = this.lanceAttaque(j1, j2, niveauActJ1);
+                message += "> Verdict        : [COUNTER HIT - INTERROMPU !] " + j1.getNom().toUpperCase() + " frappe " +
+                        j2.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+            } else if(actionJ2 == TypeAction.GARDE){
+                degatStun = j1.estimationDegatInflige(niveauActJ1);
+                j1.consomation(niveauActJ1);
+                j2.recevoirStun(degatStun);
+                message += "> Verdict        : [GARDE PARFAITE !] " + j2.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " gagne 1 de jauge Special et subit " + degatStun + " de degats de stun.";
+                j2.recevoirJaugeSpecial(1);
+            } else if(actionJ2 == TypeAction.ATTAQUE){
+                if(niveauActJ1 > niveauActJ2){
+                    degats = this.lanceAttaque(j1, j2, niveauActJ1);
+                    message += "> Verdict        : [CRUNCH - ECRASEMENT !] " + j1.getNom().toUpperCase() + " ecrase l\'attaque de " +
+                            j2.getNom().toUpperCase() + " ! \n";
+                    message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+                } else if(niveauActJ1 < niveauActJ2){
+                    degats = this.lanceAttaque(j2, j1, niveauActJ2);
+                    message += "> Verdict        : [CRUNCH - ECRASEMENT !] " + j2.getNom().toUpperCase() + " ecrase l\'attaque de " +
+                            j1.getNom().toUpperCase() + " ! \n";
+                    message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+                } else{
+                    if(j1.getVitesse() > j2.getVitesse()){
+                        degats = this.lanceAttaque(j1, j2, niveauActJ1);
+                        message += "> Verdict        : [COUNTER HIT !] " + j1.getNom().toUpperCase() + " est plus rapide que " +
+                                j2.getNom().toUpperCase() + " ! \n";
+                        message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+                    } else if(j2.getVitesse() > j1.getVitesse()){
+                        degats = this.lanceAttaque(j2, j1, niveauActJ2);
+                        message += "> Verdict        : [COUNTER HIT !] " + j2.getNom().toUpperCase() + " est plus rapide que " +
+                                j1.getNom().toUpperCase() + " ! \n";
+                        message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+                    } else{
+                        message += "> Verdict        : [EGALITE !] " + j1.getNom().toUpperCase() + " et " +
+                                j2.getNom().toUpperCase() + " ont la meme vitesse d\'attaque ! Ils se sont neutralise ! \n";
+                        message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+                    }
+                }
+            } else if(actionJ2 == TypeAction.STUN){
+                degats = this.lanceAttaque(j1, j2, niveauActJ1);
+                message += "> Verdict        : [FREE HIT !] " + j1.getNom().toUpperCase() + " frappe " +
+                        j2.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+            }
+        } else if(actionJ1 == TypeAction.GARDE){
+            if(actionJ2 == TypeAction.ATTAQUE){
+                degatStun = j2.estimationDegatInflige(niveauActJ2);
+                j2.consomation(niveauActJ2);
+                j1.recevoirStun(degatStun);
+                message += "> Verdict        : [GARDE PARFAITE !] " + j1.getNom().toUpperCase() + " bloque parfaitement l\'attaque ! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " gagne 1 de jauge Special et subit " + degatStun + " de degats de stun.";
+                j1.recevoirJaugeSpecial(1);
+            } else if(actionJ2 == TypeAction.CHOPE){
+                degats = j2.lanceChope(j1);
+                message += "> Verdict        : [BRISE-GARDE !] " + j2.getNom().toUpperCase() + " attrape " + j1.getNom().toUpperCase() +
+                        " a travers sa Garde et l'envoi au sol !\n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+            } else if(actionJ2 == TypeAction.GARDE){
+                message += "> Verdict        : [OBSERVATION !] " + j1.getNom().toUpperCase() + " et " +
+                        j2.getNom().toUpperCase() + " reste les 2 en garde et s\'observe ! \n";
+                message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+            } else if(actionJ2 == TypeAction.STUN){
+                message += "> Verdict        : [OCCASION MANQUE !] " + j1.getNom().toUpperCase() + " observe " +
+                        j2.getNom().toUpperCase() + " alors qu\'il est stun ! \n";
+                message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+            }
+        } else if(actionJ1 == TypeAction.CHOPE){
+            if(actionJ2 == TypeAction.GARDE){
+                degats = j1.lanceChope(j2);
+                message += "> Verdict        : [BRISE-GARDE !] " + j1.getNom().toUpperCase() + " attrape " + j2.getNom().toUpperCase() +
+                        " a travers sa Garde et l'envoi au sol !\n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+            } else if(actionJ2 == TypeAction.ATTAQUE){
+                degats = this.lanceAttaque(j2, j1, niveauActJ2);
+                message += "> Verdict        : [COUNTER HIT - INTERROMPU !] " + j2.getNom().toUpperCase() + " frappe " +
+                        j1.getNom().toUpperCase() + " au moment ou il tentait une Chope ! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+            } else if(actionJ2 == TypeAction.CHOPE){
+                message += "> Verdict        : [TECH - ANNULATION !] " + j1.getNom().toUpperCase() + " et " +
+                        j2.getNom().toUpperCase() + " tente une chope en meme temps et se neutralise ! \n";
+                message += "> Impact         : Les 2 chope s\'annule !";
+            } else if(actionJ2 == TypeAction.STUN){
+                degats = j1.lanceChope(j2);
+                message += "> Verdict        : [FREE CHOPE !] " + j1.getNom().toUpperCase() + " chope " +
+                        j2.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j2.getNom().toUpperCase() + " perd " + degats + " PV !";
+            }
+        } else if(actionJ1 == TypeAction.STUN){
+            if(actionJ2 == TypeAction.ATTAQUE){
+                degats = this.lanceAttaque(j2, j1, niveauActJ2);
+                message += "> Verdict        : [FREE HIT !] " + j2.getNom().toUpperCase() + " frappe " +
+                        j1.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+            } else if(actionJ2 == TypeAction.GARDE){
+                message += "> Verdict        : [OCCASION MANQUE !] " + j2.getNom().toUpperCase() + " observe " +
+                        j1.getNom().toUpperCase() + " alors qu\'il est stun ! \n";
+                message += "> Impact         : Les 2 combattant ne subisse aucun degats !";
+            } else if(actionJ2 == TypeAction.CHOPE){
+                degats = j2.lanceChope(j1);
+                message += "> Verdict        : [FREE CHOPE !] " + j2.getNom().toUpperCase() + " chope " +
+                        j1.getNom().toUpperCase() + " pendant qu\'il est stun !! \n";
+                message += "> Impact         : " + j1.getNom().toUpperCase() + " perd " + degats + " PV !";
+            } else if(actionJ2 == TypeAction.STUN){
+                message += "> Verdict        : [DOUBLE STUN !] " + j2.getNom().toUpperCase() + " et " +
+                        j1.getNom().toUpperCase() + " sont les 2 stun !!! \n";
+                message += "> Impact         : Les 2 combattant passe leur tour !";
+            }
+        }
+        return message;
+    }
+    /*public String resoudreCroisementV2(Action act1, Combattant c1, Action act2, Combattant c2){
+        TypeAction actionJ1 = act1.getNomAction();
+        int niveauActJ1 = act1.getNiveauAction();
+        TypeAction actionJ2 = act2.getNomAction();
+        int niveauActJ2 = act2.getNiveauAction();
+        String resDuel = "> Duel precedent : " + c1.getNom().toUpperCase() + " [" + actionJ1 + "][" + niveauActJ1 + "] ◄── VS ──► " +
+                c2.getNom().toUpperCase() + " [" + actionJ2 + "][" + niveauActJ2 + "] \n";
+
+        if(actionJ1 == TypeAction.ATTAQUE){
+            if(actionJ2 == TypeAction.GARDE){
+                c1.resoudreAttaqueVsGarde(niveauActJ1, c2);
+            }
+        }
+    }*/
+    public int lanceAttaque(Combattant att, Combattant cible, int niveauAttaque){
+        int degats = 0;
+        switch (niveauAttaque){
+            case 1:
+                degats = att.lanceAttaqueDebase(cible);
+                break;
+            case 2:
+                degats = att.lanceAttaqueSpecial1(cible);
+                break;
+            case 3:
+                degats = att.lanceAttaqueSpecial2(cible);
+                break;
+            case 4:
+                degats = att.lanceAttaqueUltime(cible);
+                break;
+            default:
+                System.out.println("Erreur lance attaque");
+                break;
+        }
+        return degats;
+    }
+    public void lancerCombatV2(){
+        int round = 0;
+        this.c1.reinitialiseBonusAttaque();
+        this.c2.reinitialiseBonusAttaque();
+        String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
+        while(c1.getEstVivant() && c2.getEstVivant()){
+            round++;
+            Action actJ1 = null;
+            Action actJ2 = null;
+            actJ1 = this.selectionnerAction(c1, round, actionRoundPrecedent);
+            this.pause(1000);
+            actJ2 = this.selectionnerAction(c2, round, actionRoundPrecedent);
+            c1.desactiveStun();//methode de flemmard mais simple
+            c2.desactiveStun();//methode de flemmard mais simple
+            actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
+        }
+        Scanner scanner = new Scanner(System.in);
+        if(c1.getEstVivant()){
+            this.afficheVictoire2(c1, c2, round, actionRoundPrecedent);
+            System.out.print("> Appuyez sur [Entrée] pour retourner au Menu Principal...  ");
+            scanner.nextLine();
+        } else{
+            this.afficheVictoire2(c2, c1, round, actionRoundPrecedent);
+            System.out.print("> Appuyez sur [Entrée] pour retourner au Menu Principal...  ");
+            scanner.nextLine();
+        }
+    }
+
+}
+
+==> src/moteur/RapportAction.java <==
+package moteur;
+
+import combattants.Combattant;
+
+public class RapportAction {
+/* VARIABLES */
+    private int degatsInfliges;
+    private int degatsStun;
+    private int jaugeSpeGagne;
+    private int jaugeSpePerdue;
+    private String nomAttaque;
+    private String texteVerdict;
+    private String texteImpact;
+    private Combattant combattantCible;
+
+/* CONSTRUCTEUR */
+/* CONSTRUCTEUR */
+public RapportAction(int degatsInfliges, int degatsStun, int jaugeSpeGagne, int jaugeSpePerdue, String nomAttaque,
+                     String texteVerdict, String texteImpact) {
+    this(degatsInfliges, degatsStun, jaugeSpeGagne, jaugeSpePerdue, nomAttaque, texteVerdict, texteImpact, null);
+}
+public RapportAction(int degatsInfliges, int degatsStun, int jaugeSpeGagne, int jaugeSpePerdue, String nomAttaque, String texteVerdict,
+                     String texteImpact, Combattant combattantCible) {
+        this.degatsInfliges = degatsInfliges;
+        this.degatsStun = degatsStun;
+        this.jaugeSpeGagne = jaugeSpeGagne;
+        this.jaugeSpePerdue = jaugeSpePerdue;
+        this.nomAttaque = nomAttaque;
+        this.texteVerdict = texteVerdict;
+        this.texteImpact = texteImpact;
+        this.combattantCible = combattantCible;
+    }
+
+/* GETTERS */
+    public int getDegatsInfliges() { return degatsInfliges; }
+    public int getDegatsStun() { return degatsStun; }
+    public String getTexteVerdict() { return texteVerdict; }
+    public String getTexteImpact() { return texteImpact; }
+    public int getJaugeSpeGagne(){ return jaugeSpeGagne; }
+    public int getJaugeSpePerdue() { return jaugeSpePerdue; }
+    public String getNomAttaque() { return nomAttaque; }
+    public Combattant getCombattantCible() { return combattantCible; }
+}
+
+==> src/Main.java <==
+import moteur.MenuPrincipal;
+
+public class Main {
+    public static void main(String[] args) {
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.lancerV2();
+    }
+}
+==> src/combattants/Assasin.java <==
+package combattants;
+
+import moteur.RapportAction;
+
+public class Assasin extends Combattant{
+/* CONSTRUCTEUR */
+    public Assasin(String nom){
+        super(nom, 80, 12, 85, 80);
+        this.jaugeSpecial = 1;
+    }
+
+/* METHODES */
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
+        if (this.jaugeSpecial >= 1 ){
+            this.jaugeSpecial --;
+            int degats = this.attaqueDeBase * 2;
+            int degatsStun = 20;
+            return new RapportAction(degats, degatsStun, 0, 0, "Coup en traite",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
+        if (this.jaugeSpecial >= 2 ){
+            this.jaugeSpecial -= 2;
+            int degats = (int) (this.attaqueDeBase * 2.5);
+            int jaugeSpecialPerdu = 2;
+            return new RapportAction(degats, 0, 0, jaugeSpecialPerdu, "Vol special",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
+        if (this.jaugeSpecial >= 3 ){
+            this.jaugeSpecial -= 3;
+            int degatsTotaux = (int) ((this.attaqueDeBase * 3.5) + ((cible.getVieMax() - cible.getVie()) / 4));
+            return new RapportAction(degatsTotaux, 0, 0, 0, "Aspiration d'ame",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public int estimationDegatInflige(int niveauAtt){
+        int estimation = switch (niveauAtt) {
+            case 1 -> this.attaqueDeBase;
+            case 2 -> this.attaqueDeBase * 2;
+            case 3 -> (int) (this.attaqueDeBase * 2.5);
+            case 4 -> (int) (this.attaqueDeBase * 3.5);
+            default -> 0;
+        };
+        return estimation;
+    }
+    @Override public Combattant copieCombattant(){
+        Assasin copie = new Assasin(this.nom);
+        return copie;
+    }
+    @Override public String getArchetype() {return "Assasin";}
+}
+
+
+==> src/combattants/shoto/Luke.java <==
+package combattants.shoto;
+import combattants.Combattant;
+import combattants.Shoto;
+import moteur.RapportAction;
+
+//Passif Luke : Bonus d'attaque a chaque attaque réussit des la 1er attaque
+    //Attaque de base : +2
+    //Special 1 : +3
+    //Special 2 : +4
+    //Ultime : +5
+public class Luke extends Shoto {
+/* CONSTRUCTEUR */
+    public Luke(int vie,  int attaqueDeBase, int vitesse, int stunMax){
+        super("LUKE", vie, attaqueDeBase, vitesse, stunMax);
+    }
+
+/* METHODES */
+    @Override public RapportAction lanceAttaqueDebase(Combattant cible){
+        if(this.jaugeSpecial < 3){
+            this.recevoirJaugeSpecial(1);
+        }
+        this.bonusAttaque += 2; //a voir pour mettre le mesage personaliser
+        int degats = this.attaqueDeBase + this.bonusAttaque;
+        return new RapportAction(degats, 0, 0, 0, "SAND BLAST",
+                null, null);
+    }
+    @Override public RapportAction lanceChope(Combattant cible){
+        int degats = (int) (this.attaqueDeBase * 1.5) + this.bonusAttaque;
+        return new RapportAction(degats, 0, 0, 0, "Placage au Sol",
+                null, null);
+    }
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
+        if (this.jaugeSpecial >= 1 ){
+            this.jaugeSpecial --;
+            this.bonusAttaque += 3;
+            int degats = (this.attaqueDeBase + this.bonusAttaque) * 2 ;
+            int degatsStun = 15;//Capacite Special1
+            return new RapportAction(degats, degatsStun, 0, 0, "Vulcan Blast",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
+        if (this.jaugeSpecial >= 2 ){
+            this.bonusAttaque += 4;
+            this.jaugeSpecial -= 2;
+            int degats = (this.attaqueDeBase + this.bonusAttaque) * 3;
+            this.recevoirJaugeSpecial(1); //capacite Special 2
+            return new RapportAction(degats, 0, 0, 0, "Eraser",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
+        if (this.jaugeSpecial >= 3 ){
+            this.bonusAttaque += 4;
+            this.jaugeSpecial -= 3;
+            this.jaugeStun = 0; //capacite ultime
+            int degats = (int) ((this.attaqueDeBase + this.bonusAttaque) * 4.5);
+            return new RapportAction(degats, 0, 0, 0, "Pale Rider",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public int estimationDegatInflige(int niveauAtt){
+        int estimation;
+        switch (niveauAtt){
+            case 1:
+                estimation = this.attaqueDeBase + this.bonusAttaque;
+                break;
+            case 2:
+                estimation = (this.attaqueDeBase + this.bonusAttaque) * 2;
+                break;
+            case 3:
+                estimation = (this.attaqueDeBase + this.bonusAttaque) * 3;
+                break;
+            case 4:
+                estimation = (int) ((this.attaqueDeBase + this.bonusAttaque) * 4.5);
+                break;
+            default:
+                estimation = 0;
+                break;
+        }
+        return (int) (estimation * 1.5); //Passif
+    }
+    @Override public Combattant copieCombattant(){
+        Luke luke = new Luke(this.vieMax, this.attaqueDeBase, this.vitesse, this.stunMax);
+        return luke;
+    }
+
+/* METHODE RESOUDRE */
+    @Override public RapportAction resoudreAttaqueVsGarde(int niveauAtt, Combattant cible){
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.getNom().toUpperCase();
+        RapportAction rapport = this.lanceAttaque(cible, niveauAtt);
+        String verdict;
+        String impact;
+        int degats;
+        int degatsStun;
+        if(niveauAtt == 4){
+            degats = (int) (rapport.getDegatsInfliges() * 0.70);
+            degatsStun = 0;
+            verdict = "> Verdict        : [ GARDE VS ULTIME DE LUKE ] Luke utilise sont Ultime mais " + nomCible + " se met en garde !!!";
+            impact = "> Impact      : Grace a sont Ultime Luke inflige " + degats + " degats meme si " + nomCible + " etait en garde.";
+            return new RapportAction(degats, degatsStun, 0, 0, null, verdict, impact, cible);
+        } else{
+            degats = 0;
+            degatsStun = this.estimationDegatInflige(niveauAtt);
+            verdict = "> Verdict        : [GARDE PARFAITE !] " + nomCible + " bloque parfaitement " + rapport.getNomAttaque() +
+                    " de " + nomAttaquant + " !";
+            impact = "> Impact         : " + nomCible + " gagne 1 de jauge Special et subit " + degatsStun +
+                    " de degats de stun.";
+            return new RapportAction(degats, degatsStun, 1, 0, null, verdict, impact, cible);
+        }
+
+    }
+}
+
+
+==> src/combattants/Grappler.java <==
+package combattants;
+import moteur.RapportAction;
+
+public class Grappler extends Combattant{
+/* VARIABLES */
+    private int compteurCoups;
+
+/* CONSTRUCTEUR */
+    public Grappler(String nom){
+        super(nom, 140, 15, 20, 130);
+        this.compteurCoups = 0;
+    }
+
+/* METHODES */
+    @Override public RapportAction lanceAttaqueDebase(Combattant cible){
+        this.compteurCoups++;
+        if(compteurCoups >=2 && this.jaugeSpecial < 3){
+            this.recevoirJaugeSpecial(1);
+            this.compteurCoups = 0;
+        }
+        return new RapportAction(this.attaqueDeBase, 0, 0, 0, "Gros coup de poing",
+                null, null);
+    }
+    @Override public RapportAction lanceChope(Combattant cible){
+        int degats = this.attaqueDeBase * 2;
+        int degatsStun = 25;
+        this.recevoirJaugeSpecial(1);
+        return new RapportAction(degats, degatsStun, 0, 0, "Super Chope",
+                null, null);
+    }
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
+        if (this.jaugeSpecial >= 1 ){
+            this.jaugeSpecial --;
+            int degats = (int) (this.attaqueDeBase * 1.6);
+            int degatsStun = 40;
+            return new RapportAction(degats, degatsStun, 0, 0, "Special 1",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
+        if (this.jaugeSpecial >= 2 ){
+            int degats = (int) (this.attaqueDeBase * 2.4);
+            this.jaugeSpecial -= 2;
+             this.soigne(10);
+            return new RapportAction(degats, 0, 0, 0, "Special 2",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
+        if (this.jaugeSpecial >= 3 ){
+            int degats = this.attaqueDeBase * 4;
+            this.jaugeSpecial -= 3;
+            return new RapportAction(degats, 0, 0, 0, "Ultime",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public int estimationDegatInflige(int niveauAtt){
+        int estimation = switch (niveauAtt) {
+            case 1 -> this.attaqueDeBase;
+            case 2 -> (int) (this.attaqueDeBase * 1.6);
+            case 3 -> (int) (this.attaqueDeBase * 2.4);
+            case 4 -> this.attaqueDeBase * 4;
+            default -> 0;
+        };
+        return estimation;
+    }
+    @Override public Combattant copieCombattant(){
+        Grappler copie = new Grappler(this.nom);
+        return copie;
+    }
+    @Override public String getArchetype() { return "Grappler";}
+}
+
+
+==> src/combattants/Zoner.java <==
+package combattants;
+
+import moteur.RapportAction;
+
+public class Zoner extends Combattant{
+/* CONSTRUCTEUR */
+    public Zoner(String nom){
+        super(nom, 90, 8, 65, 80);
+    }
+
+/* METHODES */
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
+        if (this.jaugeSpecial >= 1 ){
+            this.jaugeSpecial --;
+            int degats = (int) (this.attaqueDeBase * 2.5);
+            return new RapportAction(degats, 0, 0, 0, "Mine explosif",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
+        if (this.jaugeSpecial >= 2 ){
+            this.jaugeSpecial -= 2;
+            int degats = (int) (this.attaqueDeBase * 1.5);
+            int jaugeSpecialPerdu = 2;
+            return new RapportAction(degats, 0, 0, jaugeSpecialPerdu, "perte d'energie",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
+        if (this.jaugeSpecial >= 3 ){
+            this.jaugeSpecial -= 3;
+            int degats = (int) (this.attaqueDeBase * 3.5);
+            int jaugeSpecialPerdu = 4;
+            int degatsStun = cible.getStunMax();
+            return new RapportAction(degats, degatsStun, 0, jaugeSpecialPerdu, "Aspiration d'energie",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public int estimationDegatInflige(int niveauAtt){
+        int estimation = switch (niveauAtt) {
+            case 1 -> 20;
+            case 2 -> 40;
+            case 3 -> 60;
+            case 4 -> 80;
+            default -> 0;
+        };
+        return estimation;
+    }
+    @Override public Combattant copieCombattant(){
+        Zoner copie = new Zoner(this.nom);
+        return copie;
+    }
+    @Override public String getArchetype() { return "Zoner";}
+}
+
+==> src/combattants/Combattant.java <==
+package combattants;
+import moteur.RapportAction;
+abstract public class Combattant {
+    /* VARIABLES */
+    protected String nom;
+    protected int vie;
+    protected int attaqueDeBase;
+    protected int vitesse;
+    protected int jaugeSpecial;
+    protected boolean estVivant;
+    protected int vieMax;
+    protected int stunMax;
+    protected int jaugeStun;
+    protected boolean estEtourdi;
+    protected int bonusAttaque;
+
+    /* CONSTRUCTEUR */
+    protected Combattant(String nom, int vie, int attaqueDeBase, int vitesse, int stunMax) {
+        this.nom = nom;
+        this.vie = vie;
+        this.attaqueDeBase = attaqueDeBase;
+        this.vitesse = vitesse;
+        this.jaugeSpecial = 0;
+        this.estVivant = true;
+        this.vieMax = vie;
+        this.stunMax = stunMax;
+        this.estEtourdi = false;
+        this.jaugeStun = 0;
+        this.bonusAttaque = 0;
+    }
+
+    /* METHODES */
+    public RapportAction lanceAttaqueDebase(Combattant cible) {
+        if (this.jaugeSpecial < 3) {
+            this.recevoirJaugeSpecial(1);
+        }
+        return new RapportAction(this.attaqueDeBase, 0, 0, 0, "Coup de Poing",
+                null, null);
+    }
+    public RapportAction lanceChope(Combattant cible) {
+        int degats = (int) (this.attaqueDeBase * 1.5);
+        return new RapportAction(degats, 0, 0, 0, "Chope", null, null);
+    }
+    public void recevoirDegats(int degats) {
+        if (this.vie - degats <= 0) {
+            this.vie = 0;
+            this.estVivant = false;
+        } else {
+            this.vie = this.vie - degats;
+        }
+    }
+    public void recevoirJaugeSpecial(int nb) {
+        this.jaugeSpecial = Math.min(3, this.jaugeSpecial + nb);
+    }
+    public void recevoirStun(int degatsStun) {
+        if (this.jaugeStun + degatsStun < stunMax) {
+            this.jaugeStun += degatsStun;
+        } else {
+            this.estEtourdi = true;
+            this.jaugeStun = 0;
+        }
+    }
+    public String etatsCombattant() {
+        if (this.estEtourdi) {
+            return "ETOURDI";
+        } else {
+            return "NORMAL";
+        }
+    }
+    public void desactiveStun() {
+        this.estEtourdi = false;
+    }
+    public void perteJaugeSpe(int nb) {
+        this.jaugeSpecial = Math.max(0, this.jaugeSpecial - nb);
+    }
+    public void soigne(int nb) {
+        if (this.vie + nb > this.vieMax) {
+            this.vie = this.vieMax;
+        } else {
+            this.vie += nb;
+        }
+    }
+    public void reinitialiseBonusAttaque() {
+        this.bonusAttaque = 0;
+    }
+    abstract public RapportAction lanceAttaqueSpecial1(Combattant cible);
+    abstract public RapportAction lanceAttaqueSpecial2(Combattant cible);
+    abstract public RapportAction lanceAttaqueUltime(Combattant cible);
+    abstract public int estimationDegatInflige(int niveauAtt);
+    abstract public Combattant copieCombattant();
+    abstract public String getArchetype();
+
+
+    /* GETTER */
+    public String getNom() {
+        return this.nom;
+    }
+    public int getVie() {
+        return this.vie;
+    }
+    public int getAttaqueDeBase() {
+        return this.attaqueDeBase;
+    }
+    public int getVitesse() {
+        return this.vitesse;
+    }
+    public int getJaugeSpecial() {
+        return this.jaugeSpecial;
+    }
+    public boolean getEstVivant() {
+        return this.estVivant;
+    }
+    public int getVieMax() {
+        return this.vieMax;
+    }
+    public int getStunMax() {
+        return this.stunMax;
+    }
+    public int getJaugeStun() {
+        return this.jaugeStun;
+    }
+    public boolean isEstEtourdi() {
+        return this.estEtourdi;
+    }
+    public int getBoostAttaque() {
+        return this.bonusAttaque;
+    }
+
+    /* METHODES UTIL RAPPORT ACTION */
+    public RapportAction lanceAttaque(Combattant cible, int niveauAttaque) {
+        RapportAction rapport = null;
+        switch (niveauAttaque) {
+            case 1:
+                rapport = this.lanceAttaqueDebase(cible);
+                break;
+            case 2:
+                rapport = this.lanceAttaqueSpecial1(cible);
+                break;
+            case 3:
+                rapport = this.lanceAttaqueSpecial2(cible);
+                break;
+            case 4:
+                rapport = this.lanceAttaqueUltime(cible);
+                break;
+            default:
+                System.out.println("Erreur lance attaque");
+                break;
+        }
+        return rapport;
+    }
+    public RapportAction duelVitesse(Combattant cible, RapportAction rapportAtt, RapportAction rapportCible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        int degats;
+        int degatsStun;
+        int jaugeSpePerdu;
+        String verdict;
+        String impact;
+        if (this.vitesse > cible.getVitesse()) {
+            degats = rapportAtt.getDegatsInfliges();
+            degatsStun = rapportAtt.getDegatsStun();
+            jaugeSpePerdu = rapportAtt.getJaugeSpePerdue();
+            verdict = "> Verdict        : [COUNTER HIT !] " + nomAttaquant + " est plus rapide que " + nomCible + " !";
+            impact = "> Impact         : " + nomCible + " perd " + degats + " PV !";
+            return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null,  verdict, impact, cible);
+        } else if (this.vitesse < cible.getVitesse()) {
+            degats = rapportCible.getDegatsInfliges();
+            degatsStun = rapportCible.getDegatsStun();
+            jaugeSpePerdu = rapportCible.getJaugeSpePerdue();
+            verdict = "> Verdict        : [COUNTER HIT !] " + nomCible + " est plus rapide que " + nomAttaquant + " !";
+            impact = "> Impact         : " + nomAttaquant + " perd " + degats + " PV !";
+            return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null,  verdict, impact, this);
+        } else {
+            degats = 0;
+            degatsStun = 0;
+            jaugeSpePerdu = 0;
+            verdict = "> Verdict        : [EGALITE !] " + nomAttaquant + " et " + nomCible + " ont la meme vitesse d'attaque ! Ils se sont neutralise !";
+            impact = "> Impact         : Les 2 combattant ne subisse aucun degats !";
+        }
+        return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null,  verdict, impact, null);
+    }
+    /* METHODES RAPPORT ACTION */
+    public RapportAction resoudreAttaqueVsGarde(int niveauAtt, Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.getNom().toUpperCase();
+        RapportAction rapport = this.lanceAttaque(cible, niveauAtt);
+        int degats = 0;
+        int degatsStun = estimationDegatInflige(niveauAtt);
+        String verdict = "> Verdict        : [GARDE PARFAITE !] " + nomCible + " bloque parfaitement " + rapport.getNomAttaque() +
+                " de " + nomAttaquant + " !";
+        String impact = "> Impact         : " + nomCible + " gagne 1 de jauge Special et subit " + degatsStun +
+                " de degats de stun.";
+        return new RapportAction(degats, degatsStun, 1, 0, null, verdict, impact, cible);
+
+    }
+    public RapportAction resoudreAttaqueVsChope(int niveauAtt, Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        RapportAction rapport = this.lanceAttaque(cible,niveauAtt);
+        int degats = rapport.getDegatsInfliges();
+        int degatsStun = rapport.getDegatsStun();
+        int jaugeSpePerdu = rapport.getJaugeSpePerdue();
+
+        String verdict = "> Verdict        : [COUNTER HIT - INTERROMPU !] " + nomAttaquant + " frappe " + nomCible +
+                " au moment ou il tentait une Chope ! ";
+        String impacte = "> Impact         : " + nomCible + " perd " + degats + " PV !";
+        return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impacte, cible);
+    }
+    public RapportAction resoudreAttaqueVsAttaque(int niveauAttAttaquant, Combattant cible, int niveauAttCible) {
+        RapportAction rapportAttaquant = this.lanceAttaque(cible, niveauAttAttaquant);
+        RapportAction rapportCible = cible.lanceAttaque(this, niveauAttCible);
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        int degats;
+        int degatsStun;
+        int jaugeSpePerdu;
+        String verdict;
+        String impact;
+        if (niveauAttAttaquant > niveauAttCible) {
+            degats = rapportAttaquant.getDegatsInfliges();
+            degatsStun = rapportAttaquant.getDegatsStun();
+            jaugeSpePerdu = rapportAttaquant.getJaugeSpePerdue();
+            verdict = "> Verdict        : [CRUNCH - ECRASEMENT !] " + nomAttaquant + " ecrase l'attaque de " + nomCible + " !";
+            impact = "> Impact         : " + nomCible + " perd " + degats + " PV !";
+            return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impact, cible);
+        } else if (niveauAttAttaquant < niveauAttCible) {
+            degats = rapportCible.getDegatsInfliges();
+            degatsStun = rapportCible.getDegatsStun();
+            jaugeSpePerdu = rapportCible.getJaugeSpePerdue();
+            verdict = "> Verdict        : [CRUNCH - ECRASEMENT !] " + nomCible + " ecrase l'attaque de " + nomAttaquant + " !";
+            impact = "> Impact         : " + nomAttaquant + " perd " + degats + " PV !";
+            return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impact, this);
+        } else {
+            return this.duelVitesse(cible, rapportAttaquant, rapportCible);
+        }
+    }
+    public RapportAction resoudreAttaqueVsStun(int niveauAtt, Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        RapportAction rapport = this.lanceAttaque(cible, niveauAtt);
+        int degats = rapport.getDegatsInfliges();
+        int degatsStun = rapport.getDegatsStun();
+        int jaugeSpePerdu = rapport.getJaugeSpePerdue();
+        String verdict = "> Verdict        : [FREE HIT !] " + nomAttaquant + " frappe " + nomCible + " pendant qu'il est stun !!";
+        String impact = "> Impact         : " + nomCible + " perd " + degats + " PV !";
+        return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impact, cible);
+
+    }
+
+    public RapportAction resoudreChopeVsGarde(Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        RapportAction rapport = this.lanceChope(cible);
+        int degats = rapport.getDegatsInfliges();
+        int degatsStun = rapport.getDegatsStun();
+        int jaugeSpePerdu = rapport.getJaugeSpePerdue();
+        String verdict = "> Verdict        : [BRISE-GARDE !] " + nomAttaquant + " attrape " + nomCible + " a travers sa Garde et l'envoi au sol !";
+        String impact = "> Impact         : " + nomCible + " perd " + degats + " PV !";
+        return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impact, cible);
+    }
+    public RapportAction resoudreGardeVsGarde(Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        String verdict = "> Verdict        : [OBSERVATION !] " + nomAttaquant + " et " + nomCible + " reste les 2 en garde et s'observe !";
+        String impact = "> Impact         : Les 2 combattant ne subisse aucun degats !";
+        return new RapportAction(0, 0, 0, 0, null, verdict, impact, null);
+    }
+    public RapportAction resoudreGardeVsStun(Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        String verdict = "> Verdict        : [OCCASION MANQUE !] " + nomAttaquant + " observe " + nomCible + " alors qu'il est stun !";
+        String impact = "> Impact         : Les 2 combattant ne subisse aucun degats !";
+        return new RapportAction(0, 0, 0, 0, null, verdict, impact, null);
+    }
+
+    public RapportAction resoudreChopeVsStun(Combattant cible) {
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        RapportAction rapport = this.lanceChope(cible);
+        int degats = rapport.getDegatsInfliges();
+        int degatsStun = rapport.getDegatsStun();
+        int jaugeSpePerdu = rapport.getJaugeSpePerdue();
+        String verdict = "> Verdict        : [FREE CHOPE !] " + nomAttaquant + " chope " + nomCible + " pendant qu'il est stun !!";
+        String impact = "> Impact         : " + nomCible + " perd " + degats + " PV !";
+        return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impact, cible);
+    }
+    public RapportAction resoudreChopeVsChope(Combattant cible){
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        String verdict = "> Verdict        : [TECH - ANNULATION !] " + nomAttaquant + " et " + nomCible +
+                " tente une chope en meme temps et se neutralise !";
+        String impact = "> Impact         : Les 2 chope s'annule !";
+        return new RapportAction(0, 0, 0, 0, null, verdict, impact, null);
+    }
+
+    public RapportAction resoudreStunVsStun(Combattant cible){
+        String nomCible = cible.getNom().toUpperCase();
+        String nomAttaquant = this.nom.toUpperCase();
+        String verdict = "> Verdict        : [DOUBLE STUN !] Les 2 Combattant sont STUN !!!";
+        String impact = "> Impact         : Les 2 combattant passe leur tour !";
+        return new RapportAction(0, 0, 0, 0, null, verdict, impact, null);
+    }
+}
+
+==> src/combattants/Shoto.java <==
+package combattants;
+
+import moteur.RapportAction;
+
+public class Shoto extends Combattant {
+/* CONSTRUCTEUR */
+    public Shoto(String nom){
+        super(nom, 100, 10, 50, 100 );
+    }
+    public Shoto(String nom, int vie,  int attaqueDeBase, int vitesse, int stunMax){
+        super(nom, vie, attaqueDeBase, vitesse, stunMax);
+    }
+
+/* METHODES */
+    @Override public RapportAction lanceAttaqueSpecial1(Combattant cible){
+        if (this.jaugeSpecial >= 1 ){
+            this.jaugeSpecial --;
+            int degats = this.attaqueDeBase * 2;
+            int degatsStun = 15; //Capacite Special1
+            return new RapportAction(degats, degatsStun, 0, 0, "Projectil",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueSpecial2(Combattant cible){
+        if (this.jaugeSpecial >= 2 ){
+            this.jaugeSpecial -= 2;
+            int degats = this.attaqueDeBase * 3;
+            this.recevoirJaugeSpecial(1); //capacite Special 2
+            return new RapportAction(degats, 0, 0, 0, "rush kick",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public RapportAction lanceAttaqueUltime(Combattant cible){
+        if (this.jaugeSpecial >= 3 ){
+            this.jaugeSpecial -= 3;
+            int degats = (int) (this.attaqueDeBase * 4.5);
+            this.jaugeStun = 0; //capacite ultime
+            return new RapportAction(degats, 0, 0, 0, "Super projectil",
+                    null, null);
+        }
+        return null;
+    }
+    @Override public int estimationDegatInflige(int niveauAtt){
+        int estimation;
+        switch (niveauAtt){
+            case 1:
+                estimation = this.attaqueDeBase;
+                break;
+            case 2:
+                estimation = this.attaqueDeBase * 2;
+                break;
+            case 3:
+                estimation = this.attaqueDeBase * 3;
+                break;
+            case 4:
+                estimation = (int) (this.attaqueDeBase * 4.5);
+                break;
+            default:
+                estimation = 0;
+                break;
+        }
+        return (int) (estimation * 1.5); //Passif
+    }
+    @Override public Combattant copieCombattant(){
+        Shoto copie = new Shoto(this.nom);
+        return copie;
+    }
+    @Override public String getArchetype() { return "Shoto";}
+
+}
+
+==> src/combattants/Action.java <==
+package combattants;
+import enums.TypeAction;
+
+public class Action {
+/* VARIABLES */
+    protected TypeAction nomAction;
+    protected int niveauAction;
+
+/* CONSTRUCTEUR */
+    public Action(TypeAction nomAction, int niveauAction){
+        this.nomAction = nomAction;
+        this.niveauAction = niveauAction;
+    }
+
+/* GETTERS */
+    public TypeAction getNomAction() { return nomAction; }
+    public int getNiveauAction() { return niveauAction;}
+}
