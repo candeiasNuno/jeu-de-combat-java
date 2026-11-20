@@ -14,6 +14,8 @@ public class AreneIa extends Arene{
 /* METHODES */
     @Override public void lancerCombatV2(){
         int round = 0;
+        this.c1.reinitialiseBonusAttaque();
+        this.c2.reinitialiseBonusAttaque();
         String actionRoundPrecedent = "> Tour precedent : Aucun tour encore joue !";
         while(c1.getEstVivant() && c2.getEstVivant()){
             round++;
@@ -24,7 +26,7 @@ public class AreneIa extends Arene{
             actJ2 = IA.choisirActionIa(c2);
             c1.desactiveStun();//methode de flemmard mais simple
             c2.desactiveStun();//methode de flemmard mais simple
-            actionRoundPrecedent = this.resoudreCroisement(actJ1, c1, actJ2, c2);
+            actionRoundPrecedent = this.resoudreCroisementV2(actJ1, c1, actJ2, c2);
         }
         Scanner scanner = new Scanner(System.in);
         if(c1.getEstVivant()){

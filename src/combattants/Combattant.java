@@ -246,7 +246,6 @@ abstract public class Combattant {
         return new RapportAction(degats, degatsStun, 0, jaugeSpePerdu, null, verdict, impact, cible);
 
     }
-
     public RapportAction resoudreChopeVsGarde(Combattant cible) {
         String nomCible = cible.getNom().toUpperCase();
         String nomAttaquant = this.nom.toUpperCase();
@@ -272,7 +271,6 @@ abstract public class Combattant {
         String impact = "> Impact         : Les 2 combattant ne subisse aucun degats !";
         return new RapportAction(0, 0, 0, 0, null, verdict, impact, null);
     }
-
     public RapportAction resoudreChopeVsStun(Combattant cible) {
         String nomCible = cible.getNom().toUpperCase();
         String nomAttaquant = this.nom.toUpperCase();
@@ -292,7 +290,6 @@ abstract public class Combattant {
         String impact = "> Impact         : Les 2 chope s'annule !";
         return new RapportAction(0, 0, 0, 0, null, verdict, impact, null);
     }
-
     public RapportAction resoudreStunVsStun(Combattant cible){
         String nomCible = cible.getNom().toUpperCase();
         String nomAttaquant = this.nom.toUpperCase();

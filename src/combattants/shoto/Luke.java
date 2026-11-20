@@ -53,7 +53,7 @@ public class Luke extends Shoto {
     }
     @Override public RapportAction lanceAttaqueUltime(Combattant cible){
         if (this.jaugeSpecial >= 3 ){
-            this.bonusAttaque += 4;
+            this.bonusAttaque += 5;
             this.jaugeSpecial -= 3;
             this.jaugeStun = 0; //capacite ultime
             int degats = (int) ((this.attaqueDeBase + this.bonusAttaque) * 4.5);
@@ -98,7 +98,7 @@ public class Luke extends Shoto {
         int degats;
         int degatsStun;
         if(niveauAtt == 4){
-            degats = (int) (rapport.getDegatsInfliges() * 0.70);
+            degats = (int) (rapport.getDegatsInfliges() * 0.50);
             degatsStun = 0;
             verdict = "> Verdict        : [ GARDE VS ULTIME DE LUKE ] Luke utilise sont Ultime mais " + nomCible + " se met en garde !!!";
             impact = "> Impact      : Grace a sont Ultime Luke inflige " + degats + " degats meme si " + nomCible + " etait en garde.";
